@@ -1,0 +1,57 @@
+﻿@inject TestApiCall TestApiCall
+
+<p>Get</p>
+<Condition Evaluation="getResponse.Success">
+    <Match>
+        <p>@getResponse.Message</p>
+    </Match>
+    <NotMatch>
+        <p>@getResponse.Error</p>
+    </NotMatch>
+</Condition>
+<hr />
+<p>Get Id</p>
+<Condition Evaluation="getIdResponse.Success">
+    <Match><p>@getIdResponse.Message</p></Match>
+    <NotMatch><p>@getIdResponse.Error</p></NotMatch>
+</Condition>
+<hr />
+<p>Post</p>
+<Condition Evaluation="postResponse.Success">
+    <Match>@postResponse.Message</Match>
+    <NotMatch>@postResponse.Error</NotMatch>
+</Condition>
+<hr />
+
+<p>Put</p>
+<Condition Evaluation="putResponse.Success">
+    <Match>@putResponse.Message</Match>
+    <NotMatch>@putResponse.Error</NotMatch>
+</Condition>
+<hr />
+
+<p>Delete</p>
+<Condition Evaluation="deleteResponse.Success">
+    <Match>@deleteResponse.Message</Match>
+    <NotMatch>@deleteResponse.Error</NotMatch>
+</Condition>
+<hr>
+
+
+@code {  
+    ApiResponse<List<string>> getResponse = new ApiResponse<List<string>>();
+    ApiResponse<string> getIdResponse = new ApiResponse<string>();
+    ApiResponse postResponse = new ApiResponse();
+    ApiResponse putResponse = new ApiResponse();
+    ApiResponse deleteResponse = new ApiResponse();
+   
+
+    protected async override Task OnInitializedAsync()
+    {
+        getResponse = await TestApiCall.GetAllAsync();
+        getIdResponse = await TestApiCall.GetIdAsync(5);
+        postResponse = await TestApiCall.PostAsync("Post Test");
+        putResponse = await TestApiCall.PutAsync("Put Test");
+        deleteResponse = await TestApiCall.DeleteIdAsync(5);
+    }
+}
