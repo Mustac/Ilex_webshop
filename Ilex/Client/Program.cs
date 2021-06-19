@@ -5,6 +5,7 @@ using Ilex.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Radzen;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,6 +25,12 @@ namespace Ilex.Client
 
             //Custom AuthenticationStateProvider 
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+
+
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
 
             builder.Services.AddScoped<TestApiCall>();
 
