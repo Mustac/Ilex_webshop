@@ -1,3 +1,65 @@
 ﻿@page "/"
 
-<TestComponent/>
+
+<MudCarousel Class="carusel-responsive" ShowDelimiters="false" ShowArrows="false" AutoCycle="true" TData="object" AutoCycleTime="TimeSpan.FromSeconds(10)">
+    <MudCarouselItem Transition="Transition.Slide" >
+        <div class="d-flex" style="height:100%">
+            <div class="text-carusel text-center">
+
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1)">
+                    <div class="text-title-oleo">Roštilj kobasica</div>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.25)">
+                    <p class="montserat-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rutrum leo a varius aliquam. Quisque sit amet metus et erat fringilla mollis. Mauris ac urna non mi ultricies blandit vel et erat.</p>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.45)">
+                    <MudButton Style="float:right; margin-right:40px;" Variant="Variant.Filled" Color="Color.Success">Detalji</MudButton>
+                </Animate>
+               
+            </div>
+            
+            <img src="/images/carusel/carusel_1920x1080_item1.png" style="width:100%; height:100%; object-fit:cover;"/>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide" >
+        <div class="d-flex" style="height:100%">
+            <div class="text-carusel text-center">
+
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1)">
+                    <div class="text-title-oleo">Roštilj kobasica</div>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.25)">
+                    <p class="montserat-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rutrum leo a varius aliquam. Quisque sit amet metus et erat fringilla mollis. Mauris ac urna non mi ultricies blandit vel et erat.</p>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.45)">
+                    <MudButton Style="float:right; margin-right:40px;" Variant="Variant.Filled" Color="Color.Success">Detalji</MudButton>
+                </Animate>
+            </div>
+            
+            <img src="/images/carusel/carusel_1920x1080_item2.png" style="width:100%; height:100%; object-fit:cover;" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide">
+        <div class="d-flex" style="height:100%">
+            <div class="text-carusel text-center">
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1)">
+                    <div class="text-title-oleo">Roštilj kobasica</div>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.25)">
+                    <p class="montserat-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rutrum leo a varius aliquam. Quisque sit amet metus et erat fringilla mollis. Mauris ac urna non mi ultricies blandit vel et erat.</p>
+                </Animate>
+                <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(5)" Delay="TimeSpan.FromSeconds(1.45)">
+                    <MudButton Style="float:right; margin-right:40px;" Variant="Variant.Filled" Color="Color.Success">Detalji</MudButton>
+                </Animate>
+
+
+            </div>
+         
+            <img src="/images/carusel/carusel_1920x1080_item3.png" style="width:100%; height:100%; object-fit:cover;" />
+        </div>
+    </MudCarouselItem>
+</MudCarousel>
+
+@code{
+    
+}
