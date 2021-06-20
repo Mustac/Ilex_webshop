@@ -1,0 +1,23 @@
+﻿
+        <RadzenGoogleMap style="height: 100%; width:100%" Zoom=12 Center="position" MarkerClick=@OnMarkerClick>
+            <Markers>
+                <RadzenGoogleMapMarker Title="Ilex" Label="Ilex" Position="position" />
+
+            </Markers>
+
+        </RadzenGoogleMap>
+
+
+@code {
+    int zoom = 3;
+
+
+    Radzen.GoogleMapPosition position = new Radzen.GoogleMapPosition() { Lat = 60.24474098071494, Lng = 11.209812996636483 };
+
+
+
+    void OnMarkerClick(RadzenGoogleMapMarker marker)
+    {
+        Console.WriteLine($"Map {marker.Title} marker clicked. Marker position -> Lat: {marker.Position.Lat}, Lng: {marker.Position.Lng}");
+    }
+}

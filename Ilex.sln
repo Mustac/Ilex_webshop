@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ilex.Server", "Ilex\Server\Ilex.Server.csproj", "{5F4F4F42-B0A0-4E3D-A06F-5F7EE4BA768F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ilex.Server", "Ilex\Server\Ilex.Server.csproj", "{5F4F4F42-B0A0-4E3D-A06F-5F7EE4BA768F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ilex.Client", "Ilex\Client\Ilex.Client.csproj", "{90CDAB09-7FF0-4254-9AD6-36A0476FE6E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ilex.Client", "Ilex\Client\Ilex.Client.csproj", "{90CDAB09-7FF0-4254-9AD6-36A0476FE6E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ilex.Shared", "Ilex\Shared\Ilex.Shared.csproj", "{56639A58-6F80-42B5-A58D-B5A44BD6BC85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ilex.Shared", "Ilex\Shared\Ilex.Shared.csproj", "{56639A58-6F80-42B5-A58D-B5A44BD6BC85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

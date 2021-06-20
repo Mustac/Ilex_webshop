@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 Ilex/Server/appsettings.json
+*.jpg
+*.png
+*.gif
+*.svg

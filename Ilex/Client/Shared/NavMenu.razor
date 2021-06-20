@@ -1,37 +1,105 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Ilex</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿<nav class="navbar fixed-top p-0 shadow-lg navbar-expand-md navbar-light bg-light top-nav">
+    <div class="container py-2 py-md-0">
+        <a class="navbar-brand ml-3 ml-md-0" href="#">
+            <img width="60px" src="/images/logo/Ilex_logo_small.png" alt="logo" />
+        </a>
+        <button class="navbar-toggler mr-3 mr-md-0 border-0 nav-button"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </button>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav text-center text-md-left ml-auto">
+                <li class="nav-item active">
+                    <NavLink href="/" class="nav-link nav-button-hover" ActiveClass="nav-bottom-active" Match="NavLinkMatch.All">
+                        <h5 class="m-0 text-muted mx-2 py-3">Početak</h5>
+                    </NavLink>
+                    
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/trgovina" class="nav-link nav-button-hover" ActiveClass="nav-bottom-active" Match="NavLinkMatch.All">
+                        <h5 class="m-0 text-muted mx-2 py-3">Trgovina</h5>
+                    </NavLink>
+                </li>
+
+                <li class="nav-item">
+                    <NavLink href="/Onama" class="nav-link nav-button-hover" ActiveClass="nav-bottom-active" Match="NavLinkMatch.All">
+                        <h5 class="m-0 text-muted mx-2 py-3">O Nama</h5>
+                    </NavLink>
+                </li>
+
+            </ul>
+
+            <ul class="nav bg-light d-none d-lg-flex ml-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link position-relative">
+                        <i class="icon-lg icon-user fa fa-user-circle"></i>
+                        <span class="badge badge-pill badge-danger badge-cart">x</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link position-relative">
+                        <i class="icon-lg fas fa-comment icon-message"></i>
+                        <span class="badge badge-pill badge-danger badge-cart">1</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="icon-lg fa fa-heart icon-hearth"></i>
+                    </a>
+                </li>
+                <li class="nav-item position-relative">
+                    <a href="#" class="nav-link">
+                        <i class="icon-lg fa fa-shopping-cart icon-cart"></i>
+                        <span class="badge badge-pill badge-danger badge-cart">1</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section id="bottom-nav" class="container-fluid">
+    <nav  class="d-lg-none navbar nav-bottom shadow-lg text-center px-0 mx-0">
+        <ul class="nav mx-auto d-lg-none py-2">
+            <li class="nav-item position-relative mx-1 mx-md-5">
+                <a href="#" class="nav-link position-relative">
+                    <i class="icon-lg icon-user fa fa-user-circle"></i>
+                    <span class="badge badge-pill badge-danger badge-cart">x</span>
+                </a>
+            </li>
+            <li class="nav-item position-relative mx-1 mx-md-5">
+                <a href="#" class="nav-link position-relative">
+                    <i class="icon-lg fas fa-comment icon-message"></i>
+                    <span class="badge badge-pill badge-danger badge-cart">1</span>
+                </a>
+            </li>
+            <li class="nav-item position-relative mx-1 mx-md-5">
+                <a href="#" class="nav-link">
+                    <i class="icon-lg fa fa-heart icon-hearth"></i>
+                </a>
+            </li>
+            <li class="nav-item position-relative mx-1 mx-md-5">
+                <a href="#" class="nav-link">
+                    <i class="icon-lg fa fa-shopping-cart icon-cart"></i>
+                    <span class="badge badge-pill badge-danger badge-cart">1</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
+
+
+
 
 @code {
-    private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
 }

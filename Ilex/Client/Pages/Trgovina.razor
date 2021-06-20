@@ -1,0 +1,287 @@
+﻿@page "/trgovina"
+    
+<Header Title="Trgovina"/>
+    <!-- Search bar-->
+
+    <section class="featured mt-5 container pb-4">
+        <h1 class="text-center font-lobster">Naši Proizvodi</h1>
+
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-4 col-lg-5">
+                                    <div class="form-group">
+                                        <h5>Vrsta Mesa</h5>
+                                        <select id="inputState" class="form-control">
+                                            <option selected>Sve</option>
+                                            <option>Svinjetina</option>
+                                            <option>Piletina</option>
+                                            <option>Janjetina</option>
+                                            <option>Govedina</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4 col-lg-5">
+                                    <div class="form-group">
+                                        <h5>Tip Proizvoda</h5>
+                                        <select id="inputState" class="form-control">
+                                            <option selected>Sve</option>
+                                            <option>Šunka</option>
+                                            <option>Slanina</option>
+                                            <option>Kobasice</option>
+                                            <option>Čevapi</option>
+                                            <option>Pljeskavice</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-2">
+                                    <button type="button" class="btn btn-dark btn-block filter">
+                                        Filtriraj
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Featured -->
+
+        <hr />
+        <h1 class="text-center font-lobster">Akcije</h1>
+        <div class="row justify-content-center">
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/fresh-meat.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+                <h4>
+                    <span class=" cross-price">115</span>
+                    <span class="text-success font-weight-bold">99</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/sausages.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+                <h4>
+                    <span class=" cross-price">149</span>
+                    <span class="text-success font-weight-bold">139</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/pork-chops.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+                <h4>
+                    <span class=" cross-price">129</span>
+                    <span class="text-success font-weight-bold">149</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/ham.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+                <h4>
+                    <span class="cross-price">239</span>
+                    <span class="text-success font-weight-bold">199</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+        </div>
+
+        <!-- Products -->
+
+        <hr class="mt-5" />
+        <h1 class="text-center font-lobster">Standardna ponuda</h1>
+        <div class="row justify-content-center">
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/fresh-meat.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+                <h4>
+                    <span class="text-danger font-weight-bold">99</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/sausages.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">139</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/pork-chops.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">149</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/ham.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">199</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/fresh-meat.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+                <h4>
+                    <span class="text-danger font-weight-bold">99</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/sausages.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">139</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/pork-chops.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">149</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/ham.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">199</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/fresh-meat.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+                <h4>
+                    <span class="text-danger font-weight-bold">99</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/sausages.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">139</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/pork-chops.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">149</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/ham.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">199</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/fresh-meat.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+                <h4>
+                    <span class="text-danger font-weight-bold">99</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/sausages.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">139</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/pork-chops.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">149</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+            <div class="col-8 col-md-5 col-xl-3 px-3 text-center mt-5">
+                <img class="card-img-top"
+                     src="/images/Thumbnails/ham.png"
+                     alt="Card image cap" />
+                <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+                <h4>
+
+                    <span class="text-danger font-weight-bold">199</span> Nok/Kg
+                </h4>
+                <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+            </div>
+        </div>
+
+    </section>
+
+    @code {
+
+    }

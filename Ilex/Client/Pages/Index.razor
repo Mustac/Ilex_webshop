@@ -1,3 +1,135 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
 
-<TestComponent/>
+
+<!-- Hero -->
+<section id="hero">
+    <div class="hero-text-area">
+        <h1 class="font-lobster text-center text-light">Jednostavno Ukusno</h1>
+        <div class="text-center">
+            <button class="btn btn-success btn-lg text-light">Naruči</button>
+        </div>
+    </div>
+
+
+</section>
+<!-- Hero Ends -->
+
+<section class="featured mt-5 container pb-4">
+    <h1 class="text-center font-lobster">Izdvojeno :</h1>
+    <div class="row justify-content-center">
+        <div class=" col-8 col-md-6 col-xl-3  px-3 text-center mt-5">
+            <img class="card-img-top" src="/images/Thumbnails/fresh-meat.png" alt="Card image cap">
+            <h4 class="mt-3 font-montserrat-bold">Svinjske Kremenadle</h4>
+            <h4>
+                <span class="cross-price">115</span>
+                <span class="text-success font-weight-bold">99</span> Nok/Kg
+            </h4>
+            <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+        </div>
+        <div class="col-8 col-md-6 col-xl-3 px-3 text-center mt-5">
+            <img class="card-img-top" src="/images/Thumbnails/sausages.png" alt="Card image cap">
+            <h4 class="mt-3 font-montserrat-bold">Roštilj Kobasice</h4>
+            <h4>
+                <span class="cross-price">149</span>
+                <span class="text-success font-weight-bold">139</span> Nok/Kg
+            </h4>
+            <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+        </div>
+        <div class="col-8 col-md-6 col-xl-3 px-3 text-center mt-5">
+            <img class="card-img-top" src="/images/Thumbnails/pork-chops.png" alt="Card image cap">
+            <h4 class="mt-3 font-montserrat-bold">Dimljene Kremenadle</h4>
+            <h4>
+                <span class=" cross-price">129</span>
+                <span class="text-success font-weight-bold">149</span> Nok/Kg
+            </h4>
+            <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+        </div>
+        <div class="col-8 col-md-6 col-xl-3  px-3 text-center mt-5">
+            <img class="card-img-top" src="/images/Thumbnails/ham.png" alt="Card image cap">
+            <h4 class="mt-3 font-montserrat-bold">Šunka</h4>
+            <h4>
+                <span class=" cross-price">239</span>
+                <span class="text-success font-weight-bold">199</span> Nok/Kg
+            </h4>
+            <button class="btn btn-success mx-4">Dodaj u košaricu</button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- feedback Paralax -->
+
+<section class="feedback position-relative text-light mt-5">
+    <h1 class="text-center pt-5 font-lobster">Ocjene Kupaca : </h1>
+    <div class="feedback-carusel mx-auto">
+        <div id="carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <h1 class="font-lobster">Super</h1>
+                    <div><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="far fa-star px-2"></i></div>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima libero aliquam blanditiis, facilis assumenda eum.</p>
+                    <p>- Marijan Mustač</p>
+                </div>
+                <div class="carousel-item">
+                    <h1 class="font-lobster">Odlično</h1>
+                    <div><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i></div>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima libero aliquam blanditiis, facilis assumenda eum.</p>
+                    <p>- Martina Ovčar</p>
+                </div>
+                <div class="carousel-item">
+                    <h1 class="font-lobster">Super</h1>
+                    <div><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="fas fa-star px-2"></i><i class="far fa-star px-2"></i></div>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima libero aliquam blanditiis, facilis assumenda eum.</p>
+                    <p>- Marijan Mustač</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- feedback Paralax Ends-->
+<!-- Promisses -->
+<section class="container promisses mt-5">
+    <h1 class="font-lobster text-center mb-5">Kartice : </h1>
+    <div class="row justify-content-center mx-0 ">
+        <div class=" mt-2 col-11  col-md-7 col-lg-4 col-xl-3 text-center">
+            <div class="promisses-box">
+                <img class="mt-4" src="/images/Icons/medal.svg" width="80px" alt="Quality">
+                <h4 class="mt-4">Izuzetna Kvaliteta</h4>
+                <p class="text-muted mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium placeat exercitationem dignissimos tempora voluptate repellendus odit eum saepe voluptas quam.</p>
+            </div>
+        </div>
+        <div class=" mt-2 col-11 col-md-7 col-lg-4 col-xl-3 text-center">
+            <div class=" promisses-box">
+                <img class="mt-4" src="/images/Icons/piggy-bank.svg" width="80px" alt="Quality">
+                <h4 class="mt-4">Povoljno</h4>
+                <p class="text-muted mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium placeat exercitationem dignissimos tempora voluptate repellendus odit eum saepe voluptas quam.</p>
+            </div>
+        </div>
+        <div class=" mt-2 col-11 col-md-7 col-lg-4 col-xl-3 text-center">
+            <div class=" promisses-box">
+                <img class="mt-4" src="/images/Icons/express-delivery.svg" width="80px" alt="Quality">
+                <h4 class="mt-4">Flexibilna Dostava</h4>
+                <p class="text-muted mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium placeat exercitationem dignissimos tempora voluptate repellendus odit eum saepe voluptas quam.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- Promisses  Ends-->
+
+
+@code{     
+   
+
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender)
+                await JSRuntime.InvokeVoidAsync("initializeCarousel");
+        }
+}
