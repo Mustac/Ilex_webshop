@@ -52,11 +52,14 @@ body{
 
 .icon-user:hover{
   color:blue;
-  
 }
 
-.icon-hearth:hover{
-  color:red;
+.icon-user-signedin:hover{
+    color:darkolivegreen;
+}
+
+.icon-hearth:hover {
+    color: red;
 }
 
 .icon-message:hover{

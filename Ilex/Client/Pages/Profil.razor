@@ -1,0 +1,17 @@
+﻿@page "/profil"
+
+<Header Title="User Info"/>
+
+
+<AuthorizeView >
+    <Authorized Context="user">
+       <Iterations Items="user.User.Claims">
+           <p>@context.Type + @context.Value</p>
+       </Iterations>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+
+}

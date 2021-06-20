@@ -20,9 +20,14 @@ namespace Ilex.Client.Services
 
         public async Task<ApiResponse> CreateAccountAsync(UserRegistrationDTO userModel)
         {
+            var result = await _apiCall.PostWithNotificationAsync("api/account/create", userModel);
+            return result;
+        }
 
-            var result = await _apiCall.PostAsync("api/account/create", userModel);
-            _notificationMessageService.NotifyFromApiResponse(result);
+        public async Task<ApiResponse<string>> SignInAsync(UserLoginDTO userModel)
+        {
+            var result = await _apiCall.SignInAsync<string, UserLoginDTO>(userModel);
+
             return result;
         }
     }

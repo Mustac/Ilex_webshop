@@ -23,7 +23,7 @@
                     <NavLink href="/" class="nav-link nav-button-hover" ActiveClass="nav-bottom-active" Match="NavLinkMatch.All">
                         <h5 class="m-0 text-muted mx-2 py-3">Početak</h5>
                     </NavLink>
-                    
+
                 </li>
                 <li class="nav-item">
                     <NavLink href="/trgovina" class="nav-link nav-button-hover" ActiveClass="nav-bottom-active" Match="NavLinkMatch.All">
@@ -41,13 +41,24 @@
 
             <ul class="nav bg-light d-none d-lg-flex ml-auto">
                 <li class="nav-item">
-                    <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" style="cursor:pointer">
-                        <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/korisnik" Match="NavLinkMatch.Prefix">
+                    <AuthorizeView>
+                        <Authorized>
+                            <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/profil"))" style="cursor:pointer">
+                                <NavLink ActiveClass="text-success" style="text-decoration:none;" class="icon-lg icon-user-signedin fa fa-user-circle" href="/profil" Match="NavLinkMatch.Prefix">
 
-                        </NavLink>
-                            <span class="badge badge-pill badge-danger badge-cart">x</span>
-                       
-                    </span>
+                                </NavLink>
+                            </span>
+                        </Authorized>
+                        <NotAuthorized>
+                            <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/prijava"))" style="cursor:pointer">
+                                <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/prijava" Match="NavLinkMatch.Prefix">
+
+                                </NavLink>
+                                <span class="badge badge-pill badge-danger badge-cart">x</span>
+
+                            </span>
+                        </NotAuthorized>
+                    </AuthorizeView>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link position-relative">
@@ -71,16 +82,27 @@
     </div>
 </nav>
 <section id="bottom-nav" class="container-fluid">
-    <nav  class="d-lg-none navbar nav-bottom shadow-lg text-center px-0 mx-0">
+    <nav class="d-lg-none navbar nav-bottom shadow-lg text-center px-0 mx-0">
         <ul class="nav mx-auto d-lg-none py-2">
             <li class="nav-item position-relative mx-1 mx-md-5">
-                <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" style="cursor:pointer">
-                    <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/korisnik" Match="NavLinkMatch.Prefix">
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/profil"))" style="cursor:pointer">
+                            <NavLink ActiveClass="text-success" style="text-decoration:none;" class="icon-lg icon-user-signedin fa fa-user-circle" href="/profil" Match="NavLinkMatch.Prefix">
 
-                    </NavLink>
-                    <span class="badge badge-pill badge-danger badge-cart">x</span>
+                            </NavLink>
+                        </span>
+                    </Authorized>
+                    <NotAuthorized>
+                        <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/prijava"))" style="cursor:pointer">
+                            <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/prijava" Match="NavLinkMatch.Prefix">
 
-                </span>
+                            </NavLink>
+                            <span class="badge badge-pill badge-danger badge-cart">x</span>
+
+                        </span>
+                    </NotAuthorized>
+                </AuthorizeView>
             </li>
             <li class="nav-item position-relative mx-1 mx-md-5">
                 <a href="#" class="nav-link position-relative">

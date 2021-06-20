@@ -1,0 +1,81 @@
+﻿@page "/prijava"
+@inject NavigationManager NavigationManager
+@inject IAccountApiCall AccountApiCall 
+@inject ILocalStorageService LocalStorageService
+@inject AuthenticationStateProvider AuthStateProvider
+
+
+<Header title="Prijava"/>
+
+<div class="container-fluid m-0">
+    <div class="row justify-content-center">
+        <div class="col-11 col-md-6 col-lg-4 p-3 border rounded mt-5 shadow" style="max-width:450px;">
+            <h2 class="text-center mb-4 border-bottom pb-4">Prijava korisnika</h2>
+
+            <div class="alert alert-danger" role="alert">
+                Račun nije potvrđen, molimo kliknite <b style="cursor:pointer;">ovdje</b> za potvrdu
+            </div>
+            <RadzenTemplateForm TItem="UserLoginDTO" Data="@userModel" Submit="@ValidSubmit">
+                <div class="form-group">
+                    <RadzenLabel Text="Email" for="email" />
+                    <br />
+                    <div>
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userModel.Email />
+                    </div>
+                    <Condition Evaluation="string.IsNullOrEmpty(userModel.Email)">
+                        <Match>
+                            <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
+                </div>
+
+
+                <div class="form-group">
+                    <RadzenLabel Text="Lozinka" for="password" />
+                    <RadzenPassword class="form-control" Style="border-color:gray" Name="Password" @bind-Value="userModel.Password" id="password" />
+                    <Condition Evaluation="string.IsNullOrEmpty(userModel.Password)">
+                        <Match>
+                            <RadzenRequiredValidator Component="Password" Text="Password nije unesen" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenLengthValidator Component="Password" Min="6" Max="10" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
+                </div>
+
+                <div class="pt-3">
+                    <button class="btn btn-primary btn-block"> Prijava  </button>
+                </div>
+                <div class="pt-3">
+                    <button class="btn btn-dark btn-block">  Nazad </button>
+                </div>
+            </RadzenTemplateForm>
+            <div class="mt-3">
+                <p>Nemate račun ? Nema problema <button @onclick="@(()=> NavigationManager.NavigateTo("/registracija"))" class="btn btn-secondary">Otvaranje Računa</button> </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    UserLoginDTO userModel = new UserLoginDTO();
+
+
+    private async Task ValidSubmit()
+    {
+        var result = await AccountApiCall.SignInAsync(userModel);
+
+        if (result.Success)
+        {
+           await LocalStorageService.SetItemAsStringAsync("App.AuthToken",result.Content);
+            AuthStateProvider.GetAuthenticationStateAsync();
+            userModel.Password = string.Empty;
+           NavigationManager.NavigateTo("/");
+        }
+
+    }
+}

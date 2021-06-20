@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Ilex.Server.Data;
 using Ilex.Server.Services.Contracts;
+using Ilex.Server.Statics;
 using Ilex.Shared.Helpers;
 using Ilex.Shared.ModelDTOs.Account;
 using Ilex.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -19,11 +21,13 @@ namespace Ilex.Server.Controllers
         private readonly AppDbContext _db;
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public AccountController(AppDbContext db, IAccountService accountService, IMapper mapper)
+        private readonly IConfiguration _config;
+        public AccountController(AppDbContext db, IAccountService accountService, IMapper mapper, IConfiguration config)
         {
             _db = db;
             _accountService = accountService;
             _mapper = mapper;
+            _config = config;
         }
 
 
@@ -49,7 +53,7 @@ namespace Ilex.Server.Controllers
                 user.FirstName = userModel.FirstName;
                 user.LastName = userModel.LastName;
                 user.Email = userModel.Email;
-                user.EmailVerified = false;
+                user.EmailVerified = true;
                 user.HashedPassword = BCrypt.Net.BCrypt.HashPassword(userModel.ConfirmPassword);
                 user.Phone = userModel.Phone;
                 user.Street = userModel.Street;
@@ -86,6 +90,55 @@ namespace Ilex.Server.Controllers
 
 
 
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> LoginUserAsync(UserLoginDTO userModel)
+        {
+            var user = await _accountService.GetUserByEmailAsync(userModel.Email);
+
+            if (user==null)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Korisnik sa email ne postoji",
+                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                    Success = false
+                });
+            }
+
+            var correctPassword = BCrypt.Net.BCrypt.Verify(userModel.Password, user.HashedPassword);
+
+            if (!correctPassword)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Email ili password nisu točni",
+                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                    Success = false
+                });
+            }
+         
+            var token = JwtToken.CreateJwtToken(user, _config["JwtSecurityKey"], _config["JwtIssuer"], _config["JwtAudience"]);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Greška na serveru",
+                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    Success = false
+                });
+            }
+
+            return Ok(new ApiResponse<string>
+            {
+                Message = "Uspjeh",
+                ResponseCode = System.Net.HttpStatusCode.OK,
+                Success = true,
+                Content = token
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Ilex.Server.Data;
 using Ilex.Server.Services.Contracts;
+using Ilex.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,15 @@ namespace Ilex.Server.Services
                 return false;
 
             return true;
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null)
+                return null;
+
+            return user;
         }
     }
 }

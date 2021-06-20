@@ -27,6 +27,7 @@ namespace Ilex.Client
             //Custom AuthenticationStateProvider 
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
+            builder.Services.AddAuthorizationCore();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

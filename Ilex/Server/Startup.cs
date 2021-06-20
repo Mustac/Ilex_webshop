@@ -47,11 +47,12 @@ namespace Ilex.Server
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "13wdsadsadsaewqeqweqw",
-                    ValidAudience = "ewqewqewesdsadsadsadas",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("wewqewqewqewqesdasd"))
+                    ValidIssuer = Configuration["JwtIssuer"],
+                    ValidAudience = Configuration["JwtAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                 };
             });
+        
 
             services.AddControllersWithViews();
             services.AddRazorPages();

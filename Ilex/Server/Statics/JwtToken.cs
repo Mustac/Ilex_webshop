@@ -10,12 +10,10 @@ using System.Threading.Tasks;
 
 namespace Ilex.Server.Statics
 {
-    public class JwtToken
+    public static class JwtToken
     {
-        // _config["JwtSecurityKey"])
-        // _config["JwtIssuer"]
-        // _config["JwtAudience"]
-        private string CreateJwtToken(User user, string securityKey, string Issuer, string audience)
+       
+        public static string CreateJwtToken(User user, string securityKey, string Issuer, string audience)
         {
 
             var claims = new[]

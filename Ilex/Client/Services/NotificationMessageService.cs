@@ -16,14 +16,16 @@ namespace Ilex.Client.Services
             _notificationService = notificationService;
         }
 
-        public void NotifyFromApiResponse(ApiResponse apiResponse)
+        public void NotifyFromApiResponse(bool success, string text)
         {
             _notificationService.Notify
                 (
-                    severity:apiResponse.Success?NotificationSeverity.Success:NotificationSeverity.Error,
-                    summary:apiResponse.Success?apiResponse.Message:apiResponse.Error,
+                    severity:success?NotificationSeverity.Success:NotificationSeverity.Error,
+                    summary:text,
                     duration:4500
                 );
         }
+
+      
     }
 }
