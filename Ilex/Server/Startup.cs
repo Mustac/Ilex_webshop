@@ -47,9 +47,9 @@ namespace Ilex.Server
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JwtIssuer"],
-                    ValidAudience = Configuration["JwtAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                    ValidIssuer = "13wdsadsadsaewqeqweqw",
+                    ValidAudience = "ewqewqewesdsadsadsadas",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("wewqewqewqewqesdasd"))
                 };
             });
 
@@ -57,8 +57,9 @@ namespace Ilex.Server
             services.AddRazorPages();
             services.AddScoped<IBlobStorage, BlobStorage>();
             services.AddScoped<IEmailSender, EmailSender>();
-           
 
+
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddAutoMapper(typeof(Mapp));
 

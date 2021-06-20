@@ -1,6 +1,7 @@
 ﻿@page "/korisnik/novi"
-@using Ilex.Shared.ModelDTOs.Contracts
 @inject NavigationManager NavigationManager
+@inject IAccountApiCall AccountApiCall
+@inject NotificationService NotificationService
 
 <Header Title="Novi Račun" />
 
@@ -11,90 +12,90 @@
             @*<div class="alert alert-danger" role="alert">
                     This is a danger alert—check it out!
                 </div>*@
-        <RadzenTemplateForm TItem="IUserRegistrationDTO" Data="@userRegistrationModel" Submit="ValidSubmit" InvalidSubmit="InvalidSubmit">
-            <div class="form-group">
-                <RadzenLabel Text="Email Adresa" for="email" />
-                <br />
-                <div>
-                    <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userRegistrationModel.Email />
-                </div>
-                <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Email)">
-                    <Match>
-                        <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </Match>
-                    <NotMatch>
-                        <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </NotMatch>
-                </Condition>
-            </div>
-
-            <div class="form-group">
-                <div  class="d-inline-block statenum-field-size">
-                    <label for="statenum">Pozivni</label>
-                    <select class="form-control" style="border-color: gray; height:35px;" id="statenum">
-                        <option value="+47">+47</option>
-                        <option value="+385">+385</option>
-                    </select>
-                </div>
-                <div style="float:right" class="d-inline-block phone-field-size">
-                    <RadzenLabel Text="Telefon" for="phone" /><small class="text-success">( nije obavezan )</small>
+            <RadzenTemplateForm TItem="UserRegistrationDTO" Data="@userRegistrationModel" Submit="ValidSubmit">
+                <div class="form-group">
+                    <RadzenLabel Text="Email Adresa" for="email" />
                     <br />
                     <div>
-                        <RadzenNumeric ShowUpDown="false" class="form-control" Style="border-color:gray" Name="PhoneNumber" @bind-Value="phoneNumber" />
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userRegistrationModel.Email />
+                    </div>
+                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Email)">
+                        <Match>
+                            <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-inline-block statenum-field-size">
+                        <label for="statenum">Pozivni</label>
+                        <select @bind="selectedPhoneValue" class="form-control" style="border-color: gray; height:35px;" id="statenum">
+                            <option value="+47">+47</option>
+                            <option value="+385">+385</option>
+                        </select>
+                    </div>
+                    <div style="float:right" class="d-inline-block phone-field-size">
+                        <RadzenLabel Text="Telefon" for="phone" /><small class="text-success">( nije obavezan )</small>
+                        <br />
                         <div>
-                            <Condition Evaluation="phoneNumber.HasValue">
-                                <Match>
-                                    <RadzenNumericRangeValidator Component="PhoneNumber" Min="100000" Max="9999999999" Text="Od 6 do 10 znamenki" Popup=false Style="position: absolute; margin-top:2px;" />
-                                </Match>
-                            </Condition>
-                        </div>      
+                            <RadzenNumeric ShowUpDown="false" class="form-control" Style="border-color:gray" Name="PhoneNumber" @bind-Value="phoneNumber" />
+                            <div>
+                                <Condition Evaluation="phoneNumber.HasValue">
+                                    <Match>
+                                        <RadzenNumericRangeValidator Component="PhoneNumber" Min="100000" Max="9999999999" Text="Od 6 do 10 znamenki" Popup=false Style="position: absolute; margin-top:2px;" />
+                                    </Match>
+                                </Condition>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div style="width: 48%;" class="d-inline-block ">
-                    <RadzenLabel Text="Ime" for="firstname" />
-                    <RadzenTextBox class="form-control" Style="border-color:gray" Name="FirstName" @bind-Value="userRegistrationModel.FirstName" id="firstname" />
-                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.FirstName)">
+                <div class="form-group">
+                    <div style="width: 48%;" class="d-inline-block ">
+                        <RadzenLabel Text="Ime" for="firstname" />
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="FirstName" @bind-Value="userRegistrationModel.FirstName" id="firstname" />
+                        <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.FirstName)">
+                            <Match>
+                                <RadzenRequiredValidator Component="FirstName" Text="Ime je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </Match>
+                            <NotMatch>
+                                <RadzenLengthValidator Component="FirstName" Max="20" Text="Najviše 20 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </NotMatch>
+                        </Condition>
+                    </div>
+                    <div style="width: 48%;" class="d-inline-block float-right">
+                        <RadzenLabel Text="Prezime" for="lastname" />
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="LastName" @bind-Value="userRegistrationModel.LastName" id="lastname" />
+                        <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.LastName)">
+                            <Match>
+                                <RadzenRequiredValidator Component="LastName" Text="Prezime je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </Match>
+                            <NotMatch>
+                                <RadzenLengthValidator Component="LastName" Max="20" Text="Najviše 20 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </NotMatch>
+                        </Condition>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <RadzenLabel Text="Adresa ( Ulica i Broj )" for="address" />
+                    <RadzenTextBox class="form-control" Style="border-color:gray" Name="Address" @bind-Value="userRegistrationModel.Street" id="lastname" />
+                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Street)">
                         <Match>
-                            <RadzenRequiredValidator Component="FirstName" Text="Ime je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <RadzenRequiredValidator Component="Address" Text="Adresa je obavezana" Popup=false Style="position: absolute; margin-top:2px;" />
                         </Match>
                         <NotMatch>
-                            <RadzenLengthValidator Component="FirstName" Max="20" Text="Najviše 20 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <RadzenLengthValidator Component="Address" Max="60" Text="Najviše 60 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
                         </NotMatch>
                     </Condition>
                 </div>
-                <div style="width: 48%;" class="d-inline-block float-right">
-                    <RadzenLabel Text="Prezime" for="lastname" />
-                    <RadzenTextBox class="form-control" Style="border-color:gray" Name="LastName" @bind-Value="userRegistrationModel.LastName" id="lastname" />
-                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.LastName)">
-                        <Match>
-                            <RadzenRequiredValidator Component="LastName" Text="Prezime je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
-                        </Match>
-                        <NotMatch>
-                            <RadzenLengthValidator Component="LastName" Max="20" Text="Najviše 20 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
-                        </NotMatch>
-                    </Condition>
-                </div>
-            </div>
-            <div class="form-group">
-                <RadzenLabel Text="Adresa ( Ulica i Broj )" for="address" />
-                <RadzenTextBox class="form-control" Style="border-color:gray" Name="Address" @bind-Value="userRegistrationModel.Address" id="lastname" />
-                <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Address)">
-                    <Match>
-                        <RadzenRequiredValidator Component="Address" Text="Adresa je obavezana" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </Match>
-                    <NotMatch>
-                        <RadzenLengthValidator Component="Address" Max="60" Text="Najviše 60 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </NotMatch>
-                </Condition>
-            </div>
 
-            <div class="form-group">
-                <div style="width: 48%;" class="d-inline-block float-right">
-                    <RadzenLabel Text="Poštanski Broj" for="postnum" />
-                   
+                <div class="form-group">
+                    <div style="width: 48%;" class="d-inline-block float-right">
+                        <RadzenLabel Text="Poštanski Broj" for="postnum" />
+
                         <RadzenNumeric ShowUpDown="false" class="form-control" Style="border-color:gray" Name="PostNum" @bind-Value="postNumber" />
                         <div>
                             <Condition Evaluation="postNumber.HasValue">
@@ -107,59 +108,59 @@
                             </Condition>
                         </div>
                     </div>
-             
 
-                <div style="width: 48%;" class="d-inline-block">
-                    <RadzenLabel Text="Grad / Selo" for="city" />
-                    <RadzenTextBox class="form-control" Style="border-color:gray" Name="City" @bind-Value="userRegistrationModel.City" id="city" />
-                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Address)">
+
+                    <div style="width: 48%;" class="d-inline-block">
+                        <RadzenLabel Text="Grad / Selo" for="city" />
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="City" @bind-Value="userRegistrationModel.City" id="city" />
+                        <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.City)">
+                            <Match>
+                                <RadzenRequiredValidator Component="City" Text="Polje je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </Match>
+                            <NotMatch>
+                                <RadzenLengthValidator Component="City" Max="60" Text="Najviše 60 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            </NotMatch>
+                        </Condition>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <RadzenLabel Text="Lozinka" for="password" />
+                    <RadzenPassword class="form-control" Style="border-color:gray" Name="Password" @bind-Value="userRegistrationModel.Password" id="password" />
+                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Password)">
                         <Match>
-                            <RadzenRequiredValidator Component="City" Text="Polje je obavezano" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <RadzenRequiredValidator Component="Password" Text="Password je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
                         </Match>
                         <NotMatch>
-                            <RadzenLengthValidator Component="City" Max="60" Text="Najviše 60 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <RadzenLengthValidator Component="Password" Min="6" Max="10" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
                         </NotMatch>
                     </Condition>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <RadzenLabel Text="Potvrda Lozinke" for="confirmpassword" />
+                    <RadzenPassword class="form-control" Style="border-color:gray" Name="ConfirmPassword" @bind-Value="userRegistrationModel.ConfirmPassword" id="confirmpassword" />
+                    <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.ConfirmPassword)">
+                        <Match>
+                            <RadzenRequiredValidator Component="ConfirmPassword" Text="Potvrda Lozinke nemože biti prazna" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenCompareValidator Value=@userRegistrationModel.Password Component="ConfirmPassword" Text="Kriva lozinka" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
 
 
+                </div>
 
-            <div class="form-group">
-                <RadzenLabel Text="Lozinka" for="password" />
-                <RadzenPassword class="form-control" Style="border-color:gray" Name="Password" @bind-Value="userRegistrationModel.Password" id="password" />
-                <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.Password)">
-                    <Match>
-                        <RadzenRequiredValidator Component="Password" Text="Password je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </Match>
-                    <NotMatch>
-                        <RadzenLengthValidator Component="Password" Min="6" Max="10" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
-                    </NotMatch>
-                </Condition>
-            </div>
-
-            <div class="form-group">
-                <RadzenLabel Text="Potvrda Lozinke" for="confirmpassword" />
-                <RadzenPassword class="form-control" Style="border-color:gray" Name="ConfirmPassword" @bind-Value="userRegistrationModel.ConfirmPassword" id="confirmpassword" />
-                <Condition Evaluation="string.IsNullOrEmpty(userRegistrationModel.ConfirmPassword)">
-                    <Match>
-                        <RadzenRequiredValidator Component="ConfirmPassword" Text="Potvrda Lozinke nemože biti prazna" Popup=false Style="position: absolute; margin-top:2px;"/>
-                    </Match>
-                    <NotMatch>
-                <RadzenCompareValidator Component="ConfirmPassword" Text="Kriva lozinka" Popup=false Style="position: absolute; margin-top:2px;"/>
-                    </NotMatch>
-                </Condition>
-
-              
-            </div>
-
-            <div class="pt-3">
-                <button class="btn btn-primary btn-block"> Registracija  </button>
-            </div>
-            <div class="pt-3">
-                <button @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" class="btn btn-secondary btn-block">  Nazad </button>
-            </div>
-        </RadzenTemplateForm>
+                <div class="pt-3">
+                    <button class="btn btn-primary btn-block"> Registracija  </button>
+                </div>
+                <div class="pt-3">
+                    <button @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" class="btn btn-secondary btn-block">  Nazad </button>
+                </div>
+            </RadzenTemplateForm>
         </div>
     </div>
 </div>
@@ -169,18 +170,29 @@
 
     long? phoneNumber;
     int? postNumber;
+    string selectedPhoneValue = "+47";
 
-    IUserRegistrationDTO userRegistrationModel = ObjectFactory.NewUserRegistrationDTO();
+    UserRegistrationDTO userRegistrationModel = new UserRegistrationDTO();
 
 
     private async Task ValidSubmit()
     {
+        userRegistrationModel.PostNum = postNumber.Value;
+        @if(phoneNumber.HasValue)
+        userRegistrationModel.Phone = selectedPhoneValue + "/" + phoneNumber.Value.ToString();
+
+        var result = await AccountApiCall.CreateAccountAsync(userRegistrationModel);
+
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+
+
 
     }
 
-    private void InvalidSubmit()
-    {
 
-    }
 
 }

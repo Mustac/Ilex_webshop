@@ -1,13 +1,8 @@
-﻿using Ilex.Shared.Models.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Ilex.Shared.Models
 {
-    public class User : IUser
+    public class User
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -15,7 +10,7 @@ namespace Ilex.Shared.Models
         public string Email { get; set; }
         public bool EmailVerified { get; set; }
         public string HashedPassword { get; set; }
-        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public int PostNum { get; set; }

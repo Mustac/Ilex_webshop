@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Ilex.Client.ApiCaller;
 using Ilex.Client.CustomAuth;
 using Ilex.Client.Services;
+using Ilex.Client.Services.Contracts;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,9 @@ namespace Ilex.Client
             builder.Services.AddScoped<TooltipService>();
             builder.Services.AddScoped<ContextMenuService>();
 
+            builder.Services.AddScoped<IAccountApiCall, AccountApiCall>();
             builder.Services.AddScoped<TestApiCall>();
+            builder.Services.AddScoped<NotificationMessageService>();
 
             builder.Services.AddBlazoredLocalStorage();
             await builder.Build().RunAsync();

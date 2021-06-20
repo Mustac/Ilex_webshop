@@ -1,23 +1,17 @@
-﻿using Ilex.Shared.ModelDTOs.Contracts;
-using Ilex.Shared.Models.Contracts;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ilex.Shared.ModelDTOs.Account
 {
-    public class UserRegistrationDTO : IUserRegistrationDTO
+    public class UserRegistrationDTO
     {
-        [Required(ErrorMessage ="Email adresa je obavezna")]
+        [Required(ErrorMessage = "Email adresa je obavezna")]
         [EmailAddress(ErrorMessage = "Unesite ispravnu Email adresu")]
-        [StringLength(30, ErrorMessage ="Email adresa je predugacka")]
+        [StringLength(30, ErrorMessage = "Email adresa je predugacka")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Ime je obavezno")]
-        [StringLength(maximumLength:20, ErrorMessage = "Ime mora biti od 3 do 20 znamenki", MinimumLength = 3)]
+        [StringLength(maximumLength: 20, ErrorMessage = "Ime mora biti od 3 do 20 znamenki", MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Prezime je obavezno")]
@@ -26,7 +20,7 @@ namespace Ilex.Shared.ModelDTOs.Account
 
         [Required(ErrorMessage = "Ulica je obavezna")]
         [StringLength(maximumLength: 200, ErrorMessage = "Ulica mora biti od 3 do 200 znamenki", MinimumLength = 3)]
-        public string Address { get; set; }
+        public string Street { get; set; }
         [Required(ErrorMessage = "Mjesto je obavezno")]
         [StringLength(maximumLength: 50, ErrorMessage = "Mjesto mora biti od 3 do 50 znamenki", MinimumLength = 3)]
         public string City { get; set; }
@@ -40,9 +34,8 @@ namespace Ilex.Shared.ModelDTOs.Account
 
         [Compare("Password", ErrorMessage = "Lozinke se ne podudaraju")]
         public string ConfirmPassword { get; set; }
-        [Required]
-        [Phone]
-        public string PhoneNumber { get; set; }
+       
+        public string Phone { get; set; }
 
 
     }
