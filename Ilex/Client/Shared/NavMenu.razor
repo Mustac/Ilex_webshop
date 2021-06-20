@@ -1,4 +1,6 @@
-﻿<nav class="navbar fixed-top p-0 shadow-lg navbar-expand-md navbar-light bg-light top-nav">
+﻿@inject NavigationManager NavigationManager
+
+<nav class="navbar fixed-top p-0 shadow-lg navbar-expand-md navbar-light bg-light top-nav">
     <div class="container py-2 py-md-0">
         <a class="navbar-brand ml-3 ml-md-0" href="#">
             <img width="60px" src="/images/logo/Ilex_logo_small.png" alt="logo" />
@@ -39,10 +41,13 @@
 
             <ul class="nav bg-light d-none d-lg-flex ml-auto">
                 <li class="nav-item">
-                    <a href="#" class="nav-link position-relative">
-                        <i class="icon-lg icon-user fa fa-user-circle"></i>
-                        <span class="badge badge-pill badge-danger badge-cart">x</span>
-                    </a>
+                    <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" style="cursor:pointer">
+                        <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/korisnik" Match="NavLinkMatch.Prefix">
+
+                        </NavLink>
+                            <span class="badge badge-pill badge-danger badge-cart">x</span>
+                       
+                    </span>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link position-relative">
@@ -69,10 +74,13 @@
     <nav  class="d-lg-none navbar nav-bottom shadow-lg text-center px-0 mx-0">
         <ul class="nav mx-auto d-lg-none py-2">
             <li class="nav-item position-relative mx-1 mx-md-5">
-                <a href="#" class="nav-link position-relative">
-                    <i class="icon-lg icon-user fa fa-user-circle"></i>
+                <span class="nav-link position-relative" @onclick="@(()=>NavigationManager.NavigateTo("/Korisnik"))" style="cursor:pointer">
+                    <NavLink ActiveClass="text-primary" style="text-decoration:none;" class="icon-lg icon-user fa fa-user-circle" href="/korisnik" Match="NavLinkMatch.Prefix">
+
+                    </NavLink>
                     <span class="badge badge-pill badge-danger badge-cart">x</span>
-                </a>
+
+                </span>
             </li>
             <li class="nav-item position-relative mx-1 mx-md-5">
                 <a href="#" class="nav-link position-relative">

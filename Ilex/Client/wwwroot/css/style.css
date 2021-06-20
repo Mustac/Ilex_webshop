@@ -190,7 +190,8 @@ right:5px;
 
 .header-text-area{
   position: absolute;
-  width: 400px;
+  max-width: 800px;
+  min-width:400px;
   height: 300px;
   
   left:50%;
@@ -202,13 +203,24 @@ right:5px;
   font-size: 5rem;
 }
 
+.statenum-field-size{
+    width: 22%;
+}
 
-
-
-
-
+.phone-field-size{
+    width:75%;
+}
 
 @media (max-width: 768px){
+
+    .statenum-field-size {
+        width: 40%;
+    }
+
+    .phone-field-size {
+        width: 57%;
+    }
+
   #header{
    
     background-position: right;
