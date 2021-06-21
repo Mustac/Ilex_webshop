@@ -12,36 +12,50 @@
         <div class="col-11 col-md-6 col-lg-4 p-3 border rounded mt-5 shadow" style="max-width:450px;">
             <h2 class="text-center mb-4 border-bottom pb-4">Prijava korisnika</h2>
 
-            <div class="alert alert-danger" role="alert">
-                Račun nije potvrđen, molimo kliknite <b style="cursor:pointer;">ovdje</b> za potvrdu
-            </div>
+            <Condition Evaluation="status==ResponseStatus.AccountNotActivated">
+                <Match>
+                    <div class="alert alert-danger text-center" role="alert">
+                        Račun nije aktiviran, za aktivaciju kliknite tipku <b @onclick="@(()=>NavigationManager.NavigateTo("/racun/aktivacija"))" class="btn btn-outline-danger btn-block" style="cursor:pointer;">Aktivacija Računa</b>
+                    </div>
+                </Match>
+            </Condition>
             <RadzenTemplateForm TItem="UserLoginDTO" Data="@userModel" Submit="@ValidSubmit">
                 <div class="form-group">
                     <RadzenLabel Text="Email" for="email" />
                     <br />
                     <div>
-                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userModel.Email />
+                        <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userModel.Email />
                     </div>
                     <Condition Evaluation="string.IsNullOrEmpty(userModel.Email)">
                         <Match>
-                            <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
+                    
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
+                         
                         </Match>
                         <NotMatch>
-                            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
-                        </NotMatch>
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
+                                </NotMatch>
                     </Condition>
                 </div>
 
 
                 <div class="form-group">
                     <RadzenLabel Text="Lozinka" for="password" />
-                    <RadzenPassword class="form-control" Style="border-color:gray" Name="Password" @bind-Value="userModel.Password" id="password" />
+                    <RadzenPassword class="form-control text-center" Style="border-color:gray" Name="Password" @bind-Value="userModel.Password" id="password" />
                     <Condition Evaluation="string.IsNullOrEmpty(userModel.Password)">
                         <Match>
-                            <RadzenRequiredValidator Component="Password" Text="Password nije unesen" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenRequiredValidator Component="Password" Text="Password nije unesen" Popup=false Style="margin-top:2px; color:white;" />
+                                </div>
                         </Match>
                         <NotMatch>
-                            <RadzenLengthValidator Component="Password" Min="6" Max="10" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenLengthValidator Component="Password" Min="6" Max="10" Text="Od 6 do 10 znakova" Popup=false Style="margin-top:2px; color:white;" />
+                                </div>
                         </NotMatch>
                     </Condition>
                 </div>
@@ -63,18 +77,25 @@
 
 @code {
     UserLoginDTO userModel = new UserLoginDTO();
+    ResponseStatus status = 0;
 
 
     private async Task ValidSubmit()
     {
         var result = await AccountApiCall.SignInAsync(userModel);
 
-        if (result.Success)
+        if (result.ResponseStatus == ResponseStatus.Success)
         {
-           await LocalStorageService.SetItemAsStringAsync("App.AuthToken",result.Content);
+            await LocalStorageService.SetItemAsStringAsync("App.AuthToken",result.Content);
             AuthStateProvider.GetAuthenticationStateAsync();
             userModel.Password = string.Empty;
-           NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
+
+        } else if(result.ResponseStatus == ResponseStatus.AccountNotActivated)
+        {
+            status = result.ResponseStatus;
+            await LocalStorageService.SetItemAsStringAsync("email", userModel.Email);
+
         }
 
     }

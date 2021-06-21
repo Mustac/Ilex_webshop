@@ -2,12 +2,15 @@
 using Ilex.Server.Data;
 using Ilex.Server.Services.Contracts;
 using Ilex.Server.Statics;
+using Ilex.Shared.Enums;
 using Ilex.Shared.Helpers;
 using Ilex.Shared.ModelDTOs.Account;
 using Ilex.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -46,7 +49,7 @@ namespace Ilex.Server.Controllers
                     return BadRequest(new ApiResponse<UserDTO>
                     {
                         Error = "Greška, Pokušajte se odjaviti i prijaviti",
-                        ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                        ResponseStatus = ResponseStatus.Error,
                         Success = false
                     });
                 }
@@ -57,20 +60,20 @@ namespace Ilex.Server.Controllers
                 {
                     Content = userDTO,
                     Message = $"Uspjeh",
-                    ResponseCode = System.Net.HttpStatusCode.OK,
+                    ResponseStatus = ResponseStatus.Success,
                     Success = true
-                });
+                }); ;
             }
             catch
             {
                 return BadRequest(new ApiResponse<UserDTO>
                 {
                     Error = $"Greška na serveru",
-                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    ResponseStatus = ResponseStatus.ServerError,
                     Success = false
                 });
             }
-            
+
 
 
 
@@ -88,7 +91,7 @@ namespace Ilex.Server.Controllers
                     return BadRequest(new ApiResponse
                     {
                         Error = "Korisnik sa email adresom već postoji",
-                        ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                        ResponseStatus = ResponseStatus.EmailIsUnavailable,
                         Success = false
                     });
                 }
@@ -126,13 +129,13 @@ namespace Ilex.Server.Controllers
                      Ok(new ApiResponse
                      {
                          Message = $"Korisnik {userModel.FirstName} je sada registiran",
-                         ResponseCode = System.Net.HttpStatusCode.OK,
+                         ResponseStatus = ResponseStatus.Success,
                          Success = true
                      }) :
                      BadRequest(new ApiResponse
                      {
                          Error = $"Korisnik nije mogao biti registriran",
-                         ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                         ResponseStatus = ResponseStatus.Error,
                          Success = false
                      });
             }
@@ -141,7 +144,7 @@ namespace Ilex.Server.Controllers
                 return BadRequest(new ApiResponse
                 {
                     Error = $"Greška na serveru",
-                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    ResponseStatus = ResponseStatus.ServerError,
                     Success = false
                 });
             }
@@ -154,61 +157,132 @@ namespace Ilex.Server.Controllers
         [Route("Login")]
         public async Task<IActionResult> LoginUserAsync(UserLoginDTO userModel)
         {
-            var user = await _accountService.GetUserByEmailAsync(userModel.Email);
-
-            if (user==null)
+            try
             {
-                return BadRequest(new ApiResponse<string>
+                var user = await _accountService.GetUserByEmailAsync(userModel.Email);
+
+                if (user == null)
                 {
-                    Error = "Korisnik sa email ne postoji",
-                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
-                    Success = false
+                    return BadRequest(new ApiResponse<string>
+                    {
+                        Error = "Korisnik sa email ne postoji",
+                        ResponseStatus = ResponseStatus.EmailOrPasswordAreWrong,
+                        Success = false
+                    });
+                }
+
+                if (user.EmailVerified == false)
+                {
+                    return BadRequest(new ApiResponse<string>
+                    {
+                        Error = "Račun nije aktiviran",
+                        ResponseStatus = ResponseStatus.AccountNotActivated,
+                        Success = false
+                    });
+                }
+
+                var correctPassword = BCrypt.Net.BCrypt.Verify(userModel.Password, user.HashedPassword);
+
+                if (!correctPassword)
+                {
+                    return BadRequest(new ApiResponse<string>
+                    {
+                        Error = "Email ili password nisu točni",
+                        ResponseStatus = ResponseStatus.EmailOrPasswordAreWrong,
+                        Success = false
+                    });
+                }
+
+                var token = JwtToken.CreateJwtToken(user, _config["JwtSecurityKey"], _config["JwtIssuer"], _config["JwtAudience"]);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return BadRequest(new ApiResponse<string>
+                    {
+                        Error = "Greška na serveru",
+                        ResponseStatus = ResponseStatus.ServerError,
+                        Success = false
+                    });
+                }
+
+                return Ok(new ApiResponse<string>
+                {
+                    Message = "Uspjeh",
+                    ResponseStatus = ResponseStatus.Success,
+                    Success = true,
+                    Content = token
                 });
             }
-
-            if (user.EmailVerified == false)
+            catch
             {
-                return BadRequest(new ApiResponse<string>
-                {
-                    Error = "Račun nije aktiviran",
-                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
-                    Success = false
-                });
-            }
 
-            var correctPassword = BCrypt.Net.BCrypt.Verify(userModel.Password, user.HashedPassword);
-
-            if (!correctPassword)
-            {
-                return BadRequest(new ApiResponse<string>
-                {
-                    Error = "Email ili password nisu točni",
-                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
-                    Success = false
-                });
-            }
-         
-            var token = JwtToken.CreateJwtToken(user, _config["JwtSecurityKey"], _config["JwtIssuer"], _config["JwtAudience"]);
-
-            if (string.IsNullOrEmpty(token))
-            {
                 return BadRequest(new ApiResponse<string>
                 {
                     Error = "Greška na serveru",
-                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    ResponseStatus = ResponseStatus.ServerError,
+                    Success = false
+                });
+
+            }
+
+        }
+
+        [HttpGet]
+        [Route("sendemailconfirmation/{email}")]
+        public async Task<IActionResult> EmailConfirmationAsync(string email)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == null)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Pogrešan Email, Račun ne postoji",
+                    ResponseStatus = ResponseStatus.Error,
                     Success = false
                 });
             }
 
-            return Ok(new ApiResponse<string>
+            if (user.EmailVerified)
             {
-                Message = "Uspjeh",
-                ResponseCode = System.Net.HttpStatusCode.OK,
-                Success = true,
-                Content = token
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Račun je već aktiviran",
+                    ResponseStatus = ResponseStatus.Error,
+                    Success = false
+                });
+            }
+
+            var token = await _accountService.GenerateAccountConfirmationToken(user);
+
+            string emailToSend = "<span style='border: 1px solid darkblue; padding: 10px 25px; border - radius: 10px; '> " + token + " </span>";
+
+            if (token != null)
+            {
+                var response = await _emailService.SendEmailAsync(user.Email, emailToSend, "Confirmation Mail");
+                if (response)
+                {
+                    return Ok(new ApiResponse
+                    {
+                        Message = "Email sa je uspješno poslan",
+                        ResponseStatus = ResponseStatus.Success,
+                        Success = true,
+
+                    });
+                }
+            }
+
+            return BadRequest(new ApiResponse<string>
+            {
+                Error = "Greška putem slanja Emaila",
+                ResponseStatus = ResponseStatus.EmailSendingError,
+                Success = false
             });
+
+
         }
 
-     
+
+
     }
 }

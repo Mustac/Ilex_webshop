@@ -78,5 +78,7 @@ namespace Ilex.Server.Services
             return code;
 
         }
+
+        //public async Task<bool> VerifyAccountConfirmationToken()
     }
 }

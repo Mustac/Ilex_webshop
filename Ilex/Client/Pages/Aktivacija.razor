@@ -1,5 +1,6 @@
-﻿@page "/novikorisnik/aktivacija/"
+﻿@page "/racun/aktivacija/"
 @inject ILocalStorageService LocalStorageService
+@inject IAccountApiCall AccountApiCall
 
 
 <Header title="Aktivacija" />
@@ -9,22 +10,58 @@
         <div class="col-11 col-md-6 col-lg-4 p-3 border rounded mt-5 shadow" style="max-width:450px;">
             <h2 class="text-center mb-4 border-bottom pb-4">Aktivacija Korisnika</h2>
 
-            <div class="alert alert-danger" role="alert">
-                Račun nije potvrđen, molimo kliknite <b style="cursor:pointer;">ovdje</b> za potvrdu
+            <div class="alert alert-secondary text-center" role="alert">
+                Mlimo unesite Email adresu kako bi smo vam poslali kod za potvrdu
             </div>
-            <RadzenTemplateForm TItem="UserActivationDTO" Data="@userActivationModel" Submit="@ValidSubmit">
+            <RadzenTemplateForm TItem="string" Data="email" Submit="@ValidSubmit">
                 <div class="form-group">
                     <RadzenLabel Text="Email" for="email" />
                     <br />
                     <div>
-                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
+                        <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
                     </div>
                     <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
                         <Match>
-                            <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
                         </Match>
                         <NotMatch>
-                            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
+                        </NotMatch>
+                    </Condition>
+                </div>
+               
+                <div class="d-flex justify-content-between">
+                    <div style="width:45%" class="pt-3">
+                        <button class="btn btn-primary btn-block"> Nazad </button>
+                    </div>
+                    <div style="width:45%" class="pt-3">
+                        <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
+                    </div>
+                </div>
+            </RadzenTemplateForm>
+
+
+            <RadzenTemplateForm TItem="UserActivationDTO" Data="@userActivationModel" Submit="@ValidSubmitConfirmation">
+                <div class="form-group">
+                    <RadzenLabel Text="Email" for="email" />
+                    <br />
+                    <div>
+                        <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
+                    </div>
+                    <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
+                        <Match>
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
+                        </Match>
+                        <NotMatch>
+                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                            </div>
                         </NotMatch>
                     </Condition>
                 </div>
@@ -42,15 +79,16 @@
                         </NotMatch>
                     </Condition>
                 </div>
-
-                <div class="pt-3">
-                    <button class="btn btn-primary btn-block"> Aktivacija  </button>
-                </div>
-                <div class="pt-3">
-                    <button class="btn btn-dark btn-block">  Nazad </button>
+                <div class="d-flex justify-content-between">
+                    <div style="width:45%" class="pt-3">
+                        <button class="btn btn-primary btn-block"> Nazad </button>
+                    </div>
+                    <div style="width:45%" class="pt-3">
+                        <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
+                    </div>
                 </div>
             </RadzenTemplateForm>
-           
+
         </div>
     </div>
 </div>
@@ -59,15 +97,25 @@
 @code {
     UserActivationDTO userActivationModel = new UserActivationDTO();
     int? code;
+    string email;
+    ResponseStatus status;
 
     protected async override Task OnInitializedAsync()
     {
         userActivationModel.Email = await LocalStorageService.GetItemAsStringAsync("email");
+        email = userActivationModel.Email;
     }
 
     private async Task ValidSubmit()
     {
-        userActivationModel.Code = code.Value;
+        var response = await AccountApiCall.SendEmailConfirmationAsync(email);
+
+    }
+
+    private async Task ValidSubmitConfirmation()
+    {
+        if(code.HasValue)
+            userActivationModel.Code = code.Value;
 
     }
 

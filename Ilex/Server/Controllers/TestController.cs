@@ -1,4 +1,5 @@
 ﻿using Ilex.Server.Services;
+using Ilex.Shared.Enums;
 using Ilex.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,7 +35,7 @@ namespace Ilex.Server.Controllers
                 
                 Content = new List<int> { rand.Next(1,10), rand.Next(1, 10), rand.Next(1, 10), rand.Next(1, 10), rand.Next(1, 10) },
                 Message =  "Get is Success" ,
-                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = ResponseStatus.Success,
                 Success = true
             }) ;
         }
@@ -49,7 +50,7 @@ namespace Ilex.Server.Controllers
             {
                 Content = "Tina",
                 Message = "Get Id is Success",
-                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = ResponseStatus.Success,
                 Success = true
             });
         }
@@ -64,7 +65,7 @@ namespace Ilex.Server.Controllers
             return Ok(new ApiResponse
             {
                 Message = "Post value is Success" ,
-                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = ResponseStatus.Success,
                 Success = true
             });
         }
@@ -77,7 +78,7 @@ namespace Ilex.Server.Controllers
             return Ok(new ApiResponse
             {
                 Message = "Put Id with value is Success",
-                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = ResponseStatus.Success,
                 Success = true
             });
         }
@@ -90,7 +91,7 @@ namespace Ilex.Server.Controllers
             return Ok(new ApiResponse
             {
                 Message = "Delete Id with value is Success" ,
-                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = ResponseStatus.Success,
                 Success = true
             });
         }
@@ -105,13 +106,13 @@ namespace Ilex.Server.Controllers
                 Ok(new ApiResponse
             {
                 Message = "Mail Sent",
-                ResponseCode = System.Net.HttpStatusCode.OK,
-                Success = true
+                    ResponseStatus = ResponseStatus.EmailSent,
+                    Success = true
             }):
             BadRequest(new ApiResponse
             {
                 Message = "Mail could not be sent",
-                ResponseCode = System.Net.HttpStatusCode.ServiceUnavailable,
+                ResponseStatus = ResponseStatus.EmailSendingError,
                 Success = true
             });
 

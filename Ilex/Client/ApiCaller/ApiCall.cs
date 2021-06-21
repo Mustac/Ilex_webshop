@@ -1,4 +1,5 @@
 ﻿using Ilex.Client.Services;
+using Ilex.Shared.Enums;
 using Ilex.Shared.Helpers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -43,13 +44,43 @@ namespace Ilex.Client.ApiCaller
             {
                 return new ApiResponse<List<TContent>>
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
             }
 
         }
+
+        /// <summary>
+        /// HttpGet Method 
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse> GetWithNotificationAsync(string url)
+        {
+            try
+            {
+
+                HttpResponseMessage result = await _httpClient.GetAsync(url);
+
+                var apiResponse = await DeserializeAsync(result);
+                _notificationService.NotifyFromApiResponse(apiResponse.Success, apiResponse.Success ? apiResponse.Message : apiResponse.Error);
+                return apiResponse;
+            }
+            catch
+            {
+                return new ApiResponse
+                {
+                    ResponseStatus = ResponseStatus.ServerOffline,
+                    Error = "Server might be offline",
+                    Success = false
+                };
+            }
+
+        }
+
 
         /// <summary>
         /// HttpGet Method for getting data from Advanturers Shop Api
@@ -74,7 +105,7 @@ namespace Ilex.Client.ApiCaller
             {
                 return new ApiResponse<TContent>
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
@@ -108,7 +139,7 @@ namespace Ilex.Client.ApiCaller
             {
                 return new ApiResponse
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
@@ -145,7 +176,7 @@ namespace Ilex.Client.ApiCaller
             {
                 return new ApiResponse
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
@@ -173,7 +204,7 @@ namespace Ilex.Client.ApiCaller
             {
                 return new ApiResponse
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
@@ -253,7 +284,7 @@ namespace Ilex.Client.ApiCaller
             {
                 var apiResponse = new ApiResponse
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
@@ -288,7 +319,7 @@ namespace Ilex.Client.ApiCaller
             {
                 var apiResponse = new ApiResponse<TContent>
                 {
-                    ResponseCode = System.Net.HttpStatusCode.BadGateway,
+                    ResponseStatus = ResponseStatus.ServerOffline,
                     Error = "Server might be offline",
                     Success = false
                 };
