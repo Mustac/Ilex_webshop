@@ -58,12 +58,12 @@ namespace Ilex.Client.ApiCaller
         /// <param name="url"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ApiResponse<TContent>> GetByIdAsync<TContent>(string url, int id)
+        public async Task<ApiResponse<TContent>> GetByIdAsync<TContent>(string urlWithId)
         {
             try
             {
 
-                HttpResponseMessage result = await _httpClient.GetAsync($"{url}/{id}");
+                HttpResponseMessage result = await _httpClient.GetAsync(urlWithId);
 
                 var apiResponse = await DeserializeAsync<TContent>(result);
 

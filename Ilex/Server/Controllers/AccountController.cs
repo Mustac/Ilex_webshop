@@ -31,6 +31,49 @@ namespace Ilex.Server.Controllers
         }
 
 
+        [HttpGet]
+        [Route("get/{id?}")]
+        public async Task<IActionResult> GetUserById(int Id)
+        {
+            try
+            {
+                var user = await _db.Users.FindAsync(Id);
+
+                if (user == null)
+                {
+                    return BadRequest(new ApiResponse<UserDTO>
+                    {
+                        Error = "Greška, Pokušajte se odjaviti i prijaviti",
+                        ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                        Success = false
+                    });
+                }
+
+                var userDTO = _mapper.Map<UserDTO>(user);
+
+                return Ok(new ApiResponse<UserDTO>
+                {
+                    Content = userDTO,
+                    Message = $"Uspjeh",
+                    ResponseCode = System.Net.HttpStatusCode.OK,
+                    Success = true
+                });
+            }
+            catch
+            {
+                return BadRequest(new ApiResponse<UserDTO>
+                {
+                    Error = $"Greška na serveru",
+                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    Success = false
+                });
+            }
+            
+
+
+
+        }
+
         // GET: api/<ValuesController>
         [HttpPost]
         [Route("Create")]

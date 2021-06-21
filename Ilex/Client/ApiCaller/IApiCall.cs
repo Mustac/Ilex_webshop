@@ -8,7 +8,7 @@ namespace Ilex.Client.ApiCaller
     {
         Task<ApiResponse> DeleteAsync(string url, int id);
         Task<ApiResponse<List<TContent>>> GetAsync<TContent>(string url);
-        Task<ApiResponse<TContent>> GetByIdAsync<TContent>(string url, int id);
+        Task<ApiResponse<TContent>> GetByIdAsync<TContent>(string urlWithId);
         Task<ApiResponse> PostAsync<TSend>(string url, TSend content);
         Task<ApiResponse> PostWithNotificationAsync<TSend>(string url, TSend content);
         Task<ApiResponse> PutAsync<TSend>(string url, TSend content);

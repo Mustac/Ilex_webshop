@@ -9,6 +9,7 @@ namespace Ilex.Server.MapperProfile
         public Mapp()
         {
             CreateMap<User, UserRegistrationDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Ilex.Client.Services
 
         public async Task<ApiResponse<string>> GetIdAsync(int Id)
         {
-            var response = await _apiCall.GetByIdAsync<string>("api/test/get", Id);
+            var response = await _apiCall.GetByIdAsync<string>("api/test/get/"+ Id.ToString());
             return response;
         }
 

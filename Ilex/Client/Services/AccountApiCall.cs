@@ -30,5 +30,11 @@ namespace Ilex.Client.Services
 
             return result;
         }
+
+        public async Task<ApiResponse<UserDTO>> GetUserByIdAsync(int userId)
+        {
+            var result = await _apiCall.GetByIdAsync<UserDTO>("api/account/get/" + userId.ToString());
+            return result;
+        }
     }
 }

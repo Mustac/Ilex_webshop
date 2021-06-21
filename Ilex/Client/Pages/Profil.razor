@@ -1,17 +1,53 @@
 ﻿@page "/profil"
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IAccountApiCall AccountApiCall
 
-<Header Title="User Info"/>
 
+<Header Title="User Info" />
+<AuthorizeView>
+    <Authorized>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-4">
+                <div class="col-12 col-sm-9 col-md-7">
+                    <ul class="list-group">
+                        <li class="list-group-item active text-center"><i class="fas fa-address-card mr-2"></i> Profile </li>
+                        <div class="border bg-white p-4">
+                            <h2>@user.FirstName @user.LastName</h2>
+                            <div class="border rounded p-2">
+                                <p>Phone : @user.Phone</p>
+                                <p>Email : @user.Email</p>
+                                <p class="mb-0">Address : @user.Street, @user.PostNum @user.City</p>
+                                
+                            </div>
+                        </div>
+                        <li class="list-group-item text-center"><i class="fas fa-bacon mr-2"></i> Orders </li>
+                        <li class="list-group-item text-center"><i class="fas fa-sign-out-alt mr-2"></i> Logout</li>
+                    </ul>
+                </div>
 
-<AuthorizeView >
-    <Authorized Context="user">
-       <Iterations Items="user.User.Claims">
-           <p>@context.Type + @context.Value</p>
-       </Iterations>
+            </div>
+        </div>
     </Authorized>
 </AuthorizeView>
 
 
 @code {
+    UserDTO user = new UserDTO();
+    ApiResponse<UserDTO> userResponse;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+       
+            userResponse = await AccountApiCall.GetUserByIdAsync(int.Parse(
+                authState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
+            if(userResponse.Success)
+                user = userResponse.Content;
+        }
+
+    }
 
 }
