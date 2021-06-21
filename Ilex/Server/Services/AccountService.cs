@@ -35,6 +35,11 @@ namespace Ilex.Server.Services
             return user;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<string> GenerateAccountConfirmationToken(User user)
         {
             string token = GenerateRandomToken();

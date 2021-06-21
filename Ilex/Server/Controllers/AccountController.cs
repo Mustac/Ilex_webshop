@@ -113,8 +113,6 @@ namespace Ilex.Server.Controllers
 
                 user = await _accountService.GetUserByEmailAsync(user.Email);
 
-                
-
                 var code = await _accountService.GenerateAccountConfirmationToken(user);
 
                 string email = "<span style='border: 1px solid darkblue; padding: 10px 25px; border - radius: 10px; '> " + code + " </span>";
@@ -163,6 +161,16 @@ namespace Ilex.Server.Controllers
                 return BadRequest(new ApiResponse<string>
                 {
                     Error = "Korisnik sa email ne postoji",
+                    ResponseCode = System.Net.HttpStatusCode.BadRequest,
+                    Success = false
+                });
+            }
+
+            if (user.EmailVerified == false)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Račun nije aktiviran",
                     ResponseCode = System.Net.HttpStatusCode.BadRequest,
                     Success = false
                 });

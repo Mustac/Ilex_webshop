@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Ilex.Shared.Enums;
+using System.Net;
 
 namespace Ilex.Shared.Helpers
 {
@@ -7,6 +8,7 @@ namespace Ilex.Shared.Helpers
         public T Content { get; set; }
         public string Message { get; set; }
         public string Error { get; set; }
+        public StatusCode ErrorCode { get; set; }
         public HttpStatusCode ResponseCode { get; set; }
         public bool Success { get; set; }
     }
@@ -15,6 +17,7 @@ namespace Ilex.Shared.Helpers
     {
         public string Message { get; set; }
         public string Error { get; set; }
+        public StatusCode ErrorCode { get; set; }
         public HttpStatusCode ResponseCode { get; set; }
         public bool Success { get; set; }
     }
