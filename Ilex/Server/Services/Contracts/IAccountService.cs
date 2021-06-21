@@ -6,6 +6,7 @@ namespace Ilex.Server.Services.Contracts
     public interface IAccountService
     {
         Task<bool> CheckIfUserExistByEmailAsync(string email);
+        Task<string> GenerateAccountConfirmationToken(User user);
         Task<User> GetUserByEmailAsync(string email);
     }
 }

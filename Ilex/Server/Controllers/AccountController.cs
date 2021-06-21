@@ -22,12 +22,14 @@ namespace Ilex.Server.Controllers
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        public AccountController(AppDbContext db, IAccountService accountService, IMapper mapper, IConfiguration config)
+        private readonly IEmailService _emailService;
+        public AccountController(AppDbContext db, IAccountService accountService, IMapper mapper, IConfiguration config, IEmailService emailService)
         {
             _db = db;
             _accountService = accountService;
             _mapper = mapper;
             _config = config;
+            _emailService = emailService;
         }
 
 
@@ -96,7 +98,7 @@ namespace Ilex.Server.Controllers
                 user.FirstName = userModel.FirstName;
                 user.LastName = userModel.LastName;
                 user.Email = userModel.Email;
-                user.EmailVerified = true;
+                user.EmailVerified = false;
                 user.HashedPassword = BCrypt.Net.BCrypt.HashPassword(userModel.ConfirmPassword);
                 user.Phone = userModel.Phone;
                 user.Street = userModel.Street;
@@ -107,7 +109,22 @@ namespace Ilex.Server.Controllers
 
                 await _db.Users.AddAsync(user);
 
-                return await _db.SaveChangesAsync() > 0 ?
+                var savedToDbSuccess = await _db.SaveChangesAsync() > 0;
+
+                user = await _accountService.GetUserByEmailAsync(user.Email);
+
+                
+
+                var code = await _accountService.GenerateAccountConfirmationToken(user);
+
+                string email = "<span style='border: 1px solid darkblue; padding: 10px 25px; border - radius: 10px; '> " + code + " </span>";
+
+                if (savedToDbSuccess)
+                {
+                    await _emailService.SendEmailAsync(user.Email, email, "Confirmation Mail");
+                }
+
+                return savedToDbSuccess ?
                      Ok(new ApiResponse
                      {
                          Message = $"Korisnik {userModel.FirstName} je sada registiran",
@@ -183,5 +200,7 @@ namespace Ilex.Server.Controllers
                 Content = token
             });
         }
+
+     
     }
 }

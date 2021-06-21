@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject IAccountApiCall AccountApiCall
 @inject NotificationService NotificationService
+@inject ILocalStorageService LocalStorageService
 
 <Header Title="Novi Račun" />
 
@@ -185,7 +186,8 @@
 
         if (result.Success)
         {
-            NavigationManager.NavigateTo("/");
+            await LocalStorageService.SetItemAsStringAsync("email", userRegistrationModel.Email);
+            NavigationManager.NavigateTo("/novikorisnik/aktivacija");
         }
 
 

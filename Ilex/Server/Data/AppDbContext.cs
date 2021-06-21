@@ -15,5 +15,6 @@ namespace Ilex.Server.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserAccountToken> UserAccountTokens { get; set; }
     }
 }

@@ -34,5 +34,44 @@ namespace Ilex.Server.Services
 
             return user;
         }
+
+        public async Task<string> GenerateAccountConfirmationToken(User user)
+        {
+            string token = GenerateRandomToken();
+
+            var tokenRegistrated = _db.UserAccountTokens.Where(x => x.UserId == user.Id).FirstOrDefault(x => x.TokenUsedFor == Shared.Enums.TokenusedFor.UserConfirmation);
+
+            if (tokenRegistrated != null)
+                _db.UserAccountTokens.Remove(tokenRegistrated);
+
+            UserAccountToken userToken = new UserAccountToken()
+            {
+                Code = token,
+                DateCreated = DateTime.Now,
+                TokenUsedFor = Shared.Enums.TokenusedFor.UserConfirmation,
+                UserId = user.Id,
+
+            };
+
+            await _db.UserAccountTokens.AddAsync(userToken);
+
+            return await _db.SaveChangesAsync() > 0?userToken.Code:null;
+
+        }
+
+        private string GenerateRandomToken()
+        {
+            Random rand = new Random(DateTime.Now.Millisecond);
+
+            string code = string.Empty;
+
+            for (int i = 0; i < 6; i++)
+            {
+                code += rand.Next(1, 9).ToString();
+            };
+
+            return code;
+
+        }
     }
 }

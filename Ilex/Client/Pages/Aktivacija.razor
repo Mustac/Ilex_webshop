@@ -1,6 +1,74 @@
-﻿@page "/korisnik/aktivacija/{id}"
+﻿@page "/novikorisnik/aktivacija/"
+@inject ILocalStorageService LocalStorageService
+
+
+<Header title="Aktivacija" />
+
+<div class="container-fluid m-0">
+    <div class="row justify-content-center">
+        <div class="col-11 col-md-6 col-lg-4 p-3 border rounded mt-5 shadow" style="max-width:450px;">
+            <h2 class="text-center mb-4 border-bottom pb-4">Aktivacija Korisnika</h2>
+
+            <div class="alert alert-danger" role="alert">
+                Račun nije potvrđen, molimo kliknite <b style="cursor:pointer;">ovdje</b> za potvrdu
+            </div>
+            <RadzenTemplateForm TItem="UserActivationDTO" Data="@userActivationModel" Submit="@ValidSubmit">
+                <div class="form-group">
+                    <RadzenLabel Text="Email" for="email" />
+                    <br />
+                    <div>
+                        <RadzenTextBox class="form-control" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
+                    </div>
+                    <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
+                        <Match>
+                            <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
+                </div>
+
+
+                <div class="form-group">
+                    <RadzenLabel Text="Lozinka" for="password" />
+                    <RadzenNumeric class="form-control" Style="border-color:gray" Name="Password" @bind-Value="code" id="password" />
+                    <Condition Evaluation="code.HasValue">
+                        <Match>
+                            <RadzenRequiredValidator Component="Code" Text="Kod nije unesen" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </Match>
+                        <NotMatch>
+                            <RadzenLengthValidator Component="Code" Min="6" Max="7" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                        </NotMatch>
+                    </Condition>
+                </div>
+
+                <div class="pt-3">
+                    <button class="btn btn-primary btn-block"> Aktivacija  </button>
+                </div>
+                <div class="pt-3">
+                    <button class="btn btn-dark btn-block">  Nazad </button>
+                </div>
+            </RadzenTemplateForm>
+           
+        </div>
+    </div>
+</div>
 
 
 @code {
+    UserActivationDTO userActivationModel = new UserActivationDTO();
+    int? code;
+
+    protected async override Task OnInitializedAsync()
+    {
+        userActivationModel.Email = await LocalStorageService.GetItemAsStringAsync("email");
+    }
+
+    private async Task ValidSubmit()
+    {
+        userActivationModel.Code = code.Value;
+
+    }
 
 }

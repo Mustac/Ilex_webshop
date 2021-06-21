@@ -1,4 +1,5 @@
-﻿using Ilex.Shared.Helpers;
+﻿using Ilex.Server.Services;
+using Ilex.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,15 @@ namespace Ilex.Server.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+
+
+        private readonly EmailService _emailService;
+
+        public TestController(EmailService emailService)
+        {
+            _emailService = emailService;
+        }
+
         // GET: api/<TestController>
         [HttpGet]
         [Route("Get")]
@@ -83,6 +93,28 @@ namespace Ilex.Server.Controllers
                 ResponseCode = System.Net.HttpStatusCode.OK,
                 Success = true
             });
+        }
+
+        [HttpGet]
+        [Route("email")]
+        public async Task<IActionResult> SendEmail()
+        {
+            var result = await _emailService.SendEmailAsync("mustac.marijan@gmail.com","<h1>This is message from the controller - Test -</h1>","Test Message");
+
+            return result?
+                Ok(new ApiResponse
+            {
+                Message = "Mail Sent",
+                ResponseCode = System.Net.HttpStatusCode.OK,
+                Success = true
+            }):
+            BadRequest(new ApiResponse
+            {
+                Message = "Mail could not be sent",
+                ResponseCode = System.Net.HttpStatusCode.ServiceUnavailable,
+                Success = true
+            });
+
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Ilex.Shared.Models
 {
@@ -16,5 +18,6 @@ namespace Ilex.Shared.Models
         public int PostNum { get; set; }
         public DateTime DateCreated { get; set; }
         public string Role { get; set; }
+        public ICollection<UserAccountToken> UserAccountTokens { get; set; }
     }
 }

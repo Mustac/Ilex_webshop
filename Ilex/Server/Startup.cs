@@ -57,7 +57,7 @@ namespace Ilex.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddScoped<IBlobStorage, BlobStorage>();
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailService, EmailService>();
 
 
             services.AddScoped<IAccountService, AccountService>();
