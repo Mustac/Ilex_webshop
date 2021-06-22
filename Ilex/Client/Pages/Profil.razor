@@ -1,49 +1,104 @@
 ﻿@page "/profil"
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IAccountApiCall AccountApiCall
+@inject IJSRuntime JSRuntime
+@inject TooltipService tooltipService
+@inject NavigationManager NavigationManager
 
 
 <Header Title="User Info" />
 <AuthorizeView>
-    <Authorized>
+    <Authorized Context="AuthContext">
         <div class="container mt-4">
             <div class="row justify-content-center">
-                <div class="col-10 col-md-4 user-menu-item">
+                <div @onclick="@(()=>state=MenuState.MyProfile)" class="col-10 col-md-4 user-menu-item @(state==MenuState.MyProfile||state==MenuState.EditProfile?activeClass:"") ">
                     <h4 class="text-center p-2 m-0 "><i class="fas fa-address-card mr-2"></i>Moj Profil</h4>
                 </div>
-                <div class="col-10 col-md-4 user-menu-item">
+                <div @onclick="@(()=>state=MenuState.Delivered)" class="col-10 col-md-4 user-menu-item @(state==MenuState.Delivered?activeClass:"")">
                     <h4 class="text-center p-2 m-0 "><i class="fas fa-shipping-fast mr-2"></i>Narudžbe</h4>
                 </div>
-                <div class="col-10 col-md-4 user-menu-item">
+                <div @onclick="@(()=>state=MenuState.Orders)" class="col-10 col-md-4 user-menu-item @(state==MenuState.Orders?activeClass:"")">
                     <h4 class="text-center p-2 m-0 "><i class="fas fa-archive mr-2"></i>Dostavljeno</h4>
                 </div>
             </div>
-            <div class="row justify-content-center mt-2">
-                <div class="col-11 bg-dark py-3"><h3 class="text-white text-center">Informacije o korisniku</h3></div>
+            <div class="row">
+
+
             </div>
-            <div class="row justify-content-center">
-                <div class="col-11 border py-3"><h3 class="text-center">Email Adresa : @user.Email</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Ime : @user.FirstName</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Prezime : @user.LastName</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Telefon : @user.Phone</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Ulica : @user.Street</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Poš. Broj : @postNum</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Grad/Selo : @user.City</h3></div>
-                <div class="col-11 border py-3"><h3 class="text-center">Datum registracije : @user.DateCreated.ToShortDateString()</h3></div>
-            </div>
-       
+            <Condition Evaluation="state==MenuState.MyProfile">
+                <Match>
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-11 bg-dark py-3">
+                            <h3  class="text-white text-center mx-5">Informacije o korisniku</h3>
+                            <div @onclick="@(()=>NavigationManager.NavigateTo("racun/uredi"))" data-toggle="modal" data-target="#editprofilemodal">
+                                <RadzenButton Icon="input" Style="font-size:1.5rem; position:absolute; top:45%; right:20px; transform:translateY(-50%); cursor:pointer" MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Style="background-color:rgba(61, 61, 61, 0.81);", Position = TooltipPosition.Top }))" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-11 border py-3"><h3 class="text-center">Email Adresa : @user.Email</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Ime : @user.FirstName @user.LastName</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Telefon : @user.Phone</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Adresa : @user.Street, @postNum @user.City</h3></div>
+                    </div>
+                </Match>
+            </Condition>
+
+            <Condition Evaluation="state==MenuState.Orders">
+                <Match>
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-11 bg-dark py-3"><h3 class="text-white text-center">Informacije o korisniku</h3></div>
+                    </div>
+                    <div class="row justify-content-center">
+
+                        <div class="col-11 border py-3"><h3 class="text-center">Email Adresa : @user.Email</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Ime : @user.FirstName @user.LastName</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Telefon : @user.Phone</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Adresa : @user.Street, @postNum @user.City</h3></div>
+                    </div>
+                </Match>
+            </Condition>
+
+            <Condition Evaluation="state==MenuState.Delivered">
+                <Match>
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-11 bg-dark py-3">
+                            <h3 class="text-white text-center">Informacije o korisniku</h3>
+
+                            <i class="fas text-light fa-edit" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-11 border py-3"><h3 class="text-center">Email Adresa : @user.Email</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Ime : @user.FirstName @user.LastName</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Telefon : @user.Phone</h3></div>
+                        <div class="col-11 border py-3"><h3 class="text-center">Adresa : @user.Street, @postNum @user.City</h3></div>
+                    </div>
+                </Match>
+            </Condition>
+
         </div>
-        
+
     </Authorized>
 </AuthorizeView>
 
 
 @code {
+    ElementReference htmlButton;
+    RadzenButton radzenButton;
+
+
+
     UserDTO user = new UserDTO();
+    UserDTO editedUser = new UserDTO();
+
     string postNum;
-  
+    string activeClass = "user-menu-item-active";
+    MenuState state = MenuState.MyProfile;
+
     protected async override Task OnInitializedAsync()
     {
+
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
 
         if (authState.User.Identity.IsAuthenticated)
@@ -51,13 +106,35 @@
 
             var apiResponse = await AccountApiCall.GetUserByIdAsync(int.Parse(
                 authState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
-                if (apiResponse.Success)
-                {
+            if (apiResponse.Success)
+            {
                 user = apiResponse.Content;
                 postNum = apiResponse.Content.PostNum.ToString();
-                }
+            }
         }
 
     }
 
+
+
+    private void ShowTooltip(ElementReference elementReference, TooltipOptions options = null) => tooltipService.Open(elementReference, "Uredi Profil", options);
+
+    private void EditUserHandler()
+    {
+        editedUser = user;
+    }
+
+    private void ValidEditSubmit()
+        {
+
+        }
+
+
+    public enum MenuState
+    {
+        MyProfile = 0,
+        Orders = 1,
+        Delivered = 2,
+        EditProfile = 3
+    }
 }

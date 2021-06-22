@@ -18,12 +18,23 @@ namespace Ilex.Client.Services
 
         public void NotifyFromApiResponse(bool success, string text)
         {
+            //_notificationService.Notify
+            //    (
+            //        severity:success?NotificationSeverity.Success:NotificationSeverity.Error,
+            //        summary:text,
+            //        duration:4500
+            //    );
+
             _notificationService.Notify
-                (
-                    severity:success?NotificationSeverity.Success:NotificationSeverity.Error,
-                    summary:text,
-                    duration:4500
-                );
+               (
+                   new NotificationMessage
+                   {
+                       Severity=success?NotificationSeverity.Success:NotificationSeverity.Error,
+                    Summary=text,
+                    Duration=4500,
+                    Style= "position: absolute; right: 20px; bottom: 20px;"
+                   }
+               );
         }
 
       

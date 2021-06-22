@@ -321,5 +321,49 @@ namespace Ilex.Server.Controllers
 
         }
 
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateAccountAsync(UserDTO userModel)
+        {
+            var user = await _accountService.GetUserByEmailAsync(userModel.Email);
+
+            if (user == null)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Greška",
+                    ResponseStatus = ResponseStatus.Error,
+                    Success = false
+                });
+            }
+
+            user.Email = userModel.Email;
+            user.FirstName = userModel.FirstName;
+            user.LastName = userModel.LastName;
+            user.Phone = userModel.Phone;
+            user.Street = userModel.Street;
+            user.City = userModel.City;
+            user.PostNum = userModel.PostNum;
+
+            _db.Users.Update(user);
+
+            return await _db.SaveChangesAsync()>0 ?
+                Ok(new ApiResponse
+                {
+                    Message = "Uspjeh",
+                    ResponseStatus = ResponseStatus.Success,
+                    Success = true,
+
+                }) :
+                BadRequest(new ApiResponse
+                {
+                    Message = "Greška",
+                    ResponseStatus = ResponseStatus.Success,
+                    Success = true,
+
+                });
+
+        }
+
     }
 }

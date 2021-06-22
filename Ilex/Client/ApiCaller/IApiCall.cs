@@ -14,5 +14,6 @@ namespace Ilex.Client.ApiCaller
         Task<ApiResponse> PostWithNotificationAsync<TSend>(string url, TSend content);
         Task<ApiResponse> PutAsync<TSend>(string url, TSend content);
         Task<ApiResponse<TContent>> SignInAsync<TContent, TSend>(TSend content);
+        Task<ApiResponse> PutWithNotificationAsync<TSend>(string url, TSend content);
     }
 }

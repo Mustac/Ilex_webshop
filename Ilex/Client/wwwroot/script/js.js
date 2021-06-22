@@ -3,6 +3,7 @@
         $('.nav-button').toggleClass('change');
     });
 
+  
     navigation();
    
 
@@ -44,5 +45,7 @@
 
 window.initializeCarousel = () => {
     $('#carousel').carousel({ interval: 7000 });
-}
+};
+
+
 

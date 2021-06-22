@@ -183,6 +183,37 @@ namespace Ilex.Client.ApiCaller
             }
         }
 
+        /// <summary>
+        /// HTTPPut method give it a type of data we are sending
+        /// </summary>
+        /// <typeparam name="TSend"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse> PutWithNotificationAsync<TSend>(string url, TSend content)
+        {
+            try
+            {
+                var httpContent = HttpStringContent(content);
+
+                HttpResponseMessage response = await _httpClient.PutAsync(url, httpContent);
+
+                var apiResponse = await DeserializeAsync(response);
+                _notificationService.NotifyFromApiResponse(apiResponse.Success, apiResponse.Success ? apiResponse.Message : apiResponse.Error);
+                return apiResponse;
+
+            }
+            catch
+            {
+                return new ApiResponse
+                {
+                    ResponseStatus = ResponseStatus.ServerOffline,
+                    Error = "Server might be offline",
+                    Success = false
+                };
+            }
+        }
+
 
         /// <summary>
         /// HTTPDelete give it an url and id we want to delete

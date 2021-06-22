@@ -1,4 +1,5 @@
-﻿using Ilex.Client.ApiCaller;
+﻿using Blazored.LocalStorage;
+using Ilex.Client.ApiCaller;
 using Ilex.Client.Services.Contracts;
 using Ilex.Shared.Helpers;
 using Ilex.Shared.ModelDTOs.Account;
@@ -10,11 +11,13 @@ namespace Ilex.Client.Services
     {
         private readonly IApiCall _apiCall;
         private readonly NotificationMessageService _notificationMessageService;
+        private readonly ILocalStorageService _localStorageService;
 
-        public AccountApiCall(IApiCall apiCall, NotificationMessageService notificationMessageService)
+        public AccountApiCall(IApiCall apiCall, NotificationMessageService notificationMessageService, ILocalStorageService localStorageService)
         {
             _apiCall = apiCall;
             _notificationMessageService = notificationMessageService;
+            _localStorageService = localStorageService;
         }
 
 
@@ -47,6 +50,18 @@ namespace Ilex.Client.Services
         {
             var result = await _apiCall.PostWithNotificationAsync("api/account/verify", userModel);
             return result;
+        }
+
+        public async Task<ApiResponse> UpdateAccountAsync(UserDTO userModel)
+        {
+            var result = await _apiCall.PutWithNotificationAsync("api/account/update", userModel);
+            return result;
+        }
+
+        public async Task SignOutAsync()
+        {
+            await _localStorageService.RemoveItemAsync("App.AuthToken");
+            
         }
     }
 }
