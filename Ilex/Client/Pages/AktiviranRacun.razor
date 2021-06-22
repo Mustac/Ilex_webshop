@@ -1,0 +1,19 @@
+﻿@page "/racun/aktiviran"
+@inject NavigationManager NavigationManager
+
+<Header title="Uspjeh"/>
+
+<div class="container-fluid"
+    <div class="row justify-content-center mx-1" style="margin-top:100px; margin-bottom:100px;">
+        <div class="col-12 col-sm-8 col-lg-5 col-xl-4 p-4 text-center bg-success text-light border rounded shadow">
+            <h4>Vaš račun je sada aktiviran</h4>
+            <hr />
+            <p>Možete se prijaviti u aplikaciju pritiskom na tipku</p>
+            <button @onclick="@(()=>NavigationManager.NavigateTo("/prijava"))" class="btn btn-block btn-light"> Prijava </button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+}

@@ -8,5 +8,6 @@ namespace Ilex.Server.Services.Contracts
         Task<bool> CheckIfUserExistByEmailAsync(string email);
         Task<string> GenerateAccountConfirmationToken(User user);
         Task<User> GetUserByEmailAsync(string email);
+        Task<bool> VerifyingAccountConfirmationToken(User user, string token);
     }
 }

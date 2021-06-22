@@ -229,7 +229,7 @@ namespace Ilex.Server.Controllers
 
         [HttpGet]
         [Route("sendemailconfirmation/{email}")]
-        public async Task<IActionResult> EmailConfirmationAsync(string email)
+        public async Task<IActionResult> SendEmailConfirmationAsync(string email)
         {
             var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
 
@@ -264,7 +264,7 @@ namespace Ilex.Server.Controllers
                 {
                     return Ok(new ApiResponse
                     {
-                        Message = "Email sa je uspješno poslan",
+                        Message = "Potvrdni email je uspješno poslan na vašu email adresu",
                         ResponseStatus = ResponseStatus.Success,
                         Success = true,
 
@@ -282,7 +282,44 @@ namespace Ilex.Server.Controllers
 
         }
 
+        [HttpPost]
+        [Route("verify")]
+        public async Task<IActionResult> VerifyAccountAsync(UserActivationDTO userModel)
+        {
+            var user = await _db.Users.FirstAsync(x => x.Email == userModel.Email);
 
+            if (user == null)
+            {
+                return BadRequest(new ApiResponse<string>
+                {
+                    Error = "Pogrešan Email, Račun ne postoji",
+                    ResponseStatus = ResponseStatus.Error,
+                    Success = false
+                });
+            }
+
+            var result = await _accountService.VerifyingAccountConfirmationToken(user, userModel.Code.ToString());
+
+            return result?
+                 Ok(new ApiResponse
+                {
+                    Message = "Račun je sada aktiviran",
+                    ResponseStatus = ResponseStatus.Success,
+                    Success = true,
+
+                }):
+                 BadRequest(new ApiResponse
+                {
+                    Message = "Račun nije mogao biti aktiviran",
+                    ResponseStatus = ResponseStatus.Success,
+                    Success = true,
+
+                });
+
+
+
+
+        }
 
     }
 }

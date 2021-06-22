@@ -1,5 +1,6 @@
 ﻿using Ilex.Server.Data;
 using Ilex.Server.Services.Contracts;
+using Ilex.Shared.Enums;
 using Ilex.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,18 +37,18 @@ namespace Ilex.Server.Services
         }
 
         /// <summary>
-        /// 
+        /// Generating Account Confirmation Token
         /// </summary>
         /// <param name="user"></param>
-        /// <returns></returns>
+        /// <returns>Token as string or null</returns>
         public async Task<string> GenerateAccountConfirmationToken(User user)
         {
             string token = GenerateRandomToken();
 
-            var tokenRegistrated = _db.UserAccountTokens.Where(x => x.UserId == user.Id).FirstOrDefault(x => x.TokenUsedFor == Shared.Enums.TokenusedFor.UserConfirmation);
+            var tokenRegistrated = await _db.UserAccountTokens.Where(x => x.UserId == user.Id).Where(x => x.TokenUsedFor == Shared.Enums.TokenusedFor.UserConfirmation).ToListAsync();
 
-            if (tokenRegistrated != null)
-                _db.UserAccountTokens.Remove(tokenRegistrated);
+            if (tokenRegistrated.Count>1)
+                _db.UserAccountTokens.RemoveRange(tokenRegistrated);
 
             UserAccountToken userToken = new UserAccountToken()
             {
@@ -61,6 +62,29 @@ namespace Ilex.Server.Services
             await _db.UserAccountTokens.AddAsync(userToken);
 
             return await _db.SaveChangesAsync() > 0?userToken.Code:null;
+
+        }
+
+        public async Task<bool> VerifyingAccountConfirmationToken(User user, string token)
+        {
+            var result = await _db.UserAccountTokens.Where(x => x.UserId == user.Id).FirstOrDefaultAsync(x => x.TokenUsedFor == TokenusedFor.UserConfirmation);
+
+            if (result == null)
+            {
+                return false;
+            }
+
+            var verifyToken = result.Code == token;
+
+            if (!verifyToken)
+                return false;
+                
+            user.EmailVerified = true;
+            
+            _db.UserAccountTokens.Remove(result);
+            _db.Users.Update(user);
+
+            return await _db.SaveChangesAsync() > 0;
 
         }
 

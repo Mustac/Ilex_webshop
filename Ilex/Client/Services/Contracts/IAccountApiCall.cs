@@ -10,5 +10,6 @@ namespace Ilex.Client.Services.Contracts
         Task<ApiResponse<UserDTO>> GetUserByIdAsync(int userId);
         Task<ApiResponse> SendEmailConfirmationAsync(string email);
         Task<ApiResponse<string>> SignInAsync(UserLoginDTO userModel);
+        Task<ApiResponse> VerifyAccountAsync(UserActivationDTO userModel);
     }
 }

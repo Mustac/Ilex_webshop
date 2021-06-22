@@ -15,6 +15,7 @@ namespace Ilex.Shared.ModelDTOs.Account
         public string Street { get; set; }
         public string City { get; set; }
         public int PostNum { get; set; }
+        public DateTime DateCreated { get; set; }
 
     }
 }

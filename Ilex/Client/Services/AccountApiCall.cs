@@ -42,5 +42,11 @@ namespace Ilex.Client.Services
             var result = await _apiCall.GetWithNotificationAsync("api/account/sendemailconfirmation/" + email);
             return result;
         }
+
+        public async Task<ApiResponse> VerifyAccountAsync(UserActivationDTO userModel)
+        {
+            var result = await _apiCall.PostWithNotificationAsync("api/account/verify", userModel);
+            return result;
+        }
     }
 }

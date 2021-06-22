@@ -6,46 +6,56 @@
 <Header Title="User Info" />
 <AuthorizeView>
     <Authorized>
-        <div class="container-fluid">
-            <div class="row justify-content-center mt-4">
-                <div class="col-12 col-sm-9 col-md-7">
-                    <ul class="list-group">
-                        <li class="list-group-item active text-center"><i class="fas fa-address-card mr-2"></i> Profile </li>
-                        <div class="border bg-white p-4">
-                            <h2>@user.FirstName @user.LastName</h2>
-                            <div class="border rounded p-2">
-                                <p>Phone : @user.Phone</p>
-                                <p>Email : @user.Email</p>
-                                <p class="mb-0">Address : @user.Street, @user.PostNum @user.City</p>
-                                
-                            </div>
-                        </div>
-                        <li class="list-group-item text-center"><i class="fas fa-bacon mr-2"></i> Orders </li>
-                        <li class="list-group-item text-center"><i class="fas fa-sign-out-alt mr-2"></i> Logout</li>
-                    </ul>
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-10 col-md-4 user-menu-item">
+                    <h4 class="text-center p-2 m-0 "><i class="fas fa-address-card mr-2"></i>Moj Profil</h4>
                 </div>
-
+                <div class="col-10 col-md-4 user-menu-item">
+                    <h4 class="text-center p-2 m-0 "><i class="fas fa-shipping-fast mr-2"></i>Narudžbe</h4>
+                </div>
+                <div class="col-10 col-md-4 user-menu-item">
+                    <h4 class="text-center p-2 m-0 "><i class="fas fa-archive mr-2"></i>Dostavljeno</h4>
+                </div>
             </div>
+            <div class="row justify-content-center mt-2">
+                <div class="col-11 bg-dark py-3"><h3 class="text-white text-center">Informacije o korisniku</h3></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-11 border py-3"><h3 class="text-center">Email Adresa : @user.Email</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Ime : @user.FirstName</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Prezime : @user.LastName</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Telefon : @user.Phone</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Ulica : @user.Street</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Poš. Broj : @postNum</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Grad/Selo : @user.City</h3></div>
+                <div class="col-11 border py-3"><h3 class="text-center">Datum registracije : @user.DateCreated.ToShortDateString()</h3></div>
+            </div>
+       
         </div>
+        
     </Authorized>
 </AuthorizeView>
 
 
 @code {
     UserDTO user = new UserDTO();
-    ApiResponse<UserDTO> userResponse;
-
+    string postNum;
+  
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
 
         if (authState.User.Identity.IsAuthenticated)
         {
-       
-            userResponse = await AccountApiCall.GetUserByIdAsync(int.Parse(
+
+            var apiResponse = await AccountApiCall.GetUserByIdAsync(int.Parse(
                 authState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
-            if(userResponse.Success)
-                user = userResponse.Content;
+                if (apiResponse.Success)
+                {
+                user = apiResponse.Content;
+                postNum = apiResponse.Content.PostNum.ToString();
+                }
         }
 
     }

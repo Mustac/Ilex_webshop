@@ -1,6 +1,7 @@
 ﻿@page "/racun/aktivacija/"
 @inject ILocalStorageService LocalStorageService
 @inject IAccountApiCall AccountApiCall
+@inject NavigationManager NavigationManager
 
 
 <Header title="Aktivacija" />
@@ -10,85 +11,92 @@
         <div class="col-11 col-md-6 col-lg-4 p-3 border rounded mt-5 shadow" style="max-width:450px;">
             <h2 class="text-center mb-4 border-bottom pb-4">Aktivacija Korisnika</h2>
 
-            <div class="alert alert-secondary text-center" role="alert">
-                Mlimo unesite Email adresu kako bi smo vam poslali kod za potvrdu
-            </div>
-            <RadzenTemplateForm TItem="string" Data="email" Submit="@ValidSubmit">
-                <div class="form-group">
-                    <RadzenLabel Text="Email" for="email" />
-                    <br />
-                    <div>
-                        <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
+            
+            <Condition Evaluation="firstForm">
+                <Match>
+                    <div class="alert alert-secondary text-center" role="alert">
+                        Molimo unesite Email adresu kako bi smo vam poslali kod za potvrdu računa
                     </div>
-                    <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
-                        <Match>
-                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
-                                <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                    <RadzenTemplateForm TItem="string" Data="email" Submit="@ValidSubmit">
+                        <div class="form-group">
+                            <RadzenLabel Text="Email" for="email" />
+                            <br />
+                            <div>
+                                <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
                             </div>
-                        </Match>
-                        <NotMatch>
-                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
-                                <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                            <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
+                                <Match>
+                                    <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                        <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                                    </div>
+                                </Match>
+                                <NotMatch>
+                                    <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                        <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                                    </div>
+                                </NotMatch>
+                            </Condition>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div style="width:45%" class="pt-3">
+                                <button class="btn btn-primary btn-block"> Nazad </button>
                             </div>
-                        </NotMatch>
-                    </Condition>
-                </div>
-               
-                <div class="d-flex justify-content-between">
-                    <div style="width:45%" class="pt-3">
-                        <button class="btn btn-primary btn-block"> Nazad </button>
-                    </div>
-                    <div style="width:45%" class="pt-3">
-                        <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
-                    </div>
-                </div>
-            </RadzenTemplateForm>
-
-
-            <RadzenTemplateForm TItem="UserActivationDTO" Data="@userActivationModel" Submit="@ValidSubmitConfirmation">
-                <div class="form-group">
-                    <RadzenLabel Text="Email" for="email" />
-                    <br />
-                    <div>
-                        <RadzenTextBox class="form-control text-center" Style="border-color:gray" Name="Email" @bind-Value=@userActivationModel.Email />
-                    </div>
-                    <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
-                        <Match>
-                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
-                                <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                            <div style="width:45%" class="pt-3">
+                                <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
                             </div>
-                        </Match>
-                        <NotMatch>
-                            <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
-                                <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                        </div>
+                    </RadzenTemplateForm>
+                </Match>
+                <NotMatch>
+                    <div class="alert alert-success text-center" role="alert">
+                        Email je poslan, molimo unesite kod unutar odgovarajučeg polja
+                    </div>
+                    <RadzenTemplateForm TItem="UserActivationDTO" Data="@userActivationModel" Submit="@ValidSubmitConfirmation">
+                        <div class="form-group">
+                            <RadzenLabel Text="Email" for="email" />
+                            <br />
+                            <div>
+                                <RadzenTextBox Disabled="true" class="form-control text-center" Style="border-color:gray; color:#505050; background-color:#dbdbdb" Name="Email" @bind-Value=@userActivationModel.Email />
                             </div>
-                        </NotMatch>
-                    </Condition>
-                </div>
+                            <Condition Evaluation="string.IsNullOrEmpty(userActivationModel.Email)">
+                                <Match>
+                                    <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                        <RadzenRequiredValidator Component="Email" Text="Email je obavezan" Popup=false Style="margin-top:2px; color:white;" />
+                                    </div>
+                                </Match>
+                                <NotMatch>
+                                    <div class="text-center bg-danger" style="width:100%; border-bottom-right-radius:10px; border-bottom-left-radius:10px; ">
+                                        <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup=false Style="margin-top:2px; color:white;" />
+                                    </div>
+                                </NotMatch>
+                            </Condition>
+                        </div>
 
 
-                <div class="form-group">
-                    <RadzenLabel Text="Lozinka" for="password" />
-                    <RadzenNumeric class="form-control" Style="border-color:gray" Name="Password" @bind-Value="code" id="password" />
-                    <Condition Evaluation="code.HasValue">
-                        <Match>
-                            <RadzenRequiredValidator Component="Code" Text="Kod nije unesen" Popup=false Style="position: absolute; margin-top:2px;" />
-                        </Match>
-                        <NotMatch>
-                            <RadzenLengthValidator Component="Code" Min="6" Max="7" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
-                        </NotMatch>
-                    </Condition>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div style="width:45%" class="pt-3">
-                        <button class="btn btn-primary btn-block"> Nazad </button>
-                    </div>
-                    <div style="width:45%" class="pt-3">
-                        <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
-                    </div>
-                </div>
-            </RadzenTemplateForm>
-
+                        <div class="form-group">
+                            <RadzenLabel Text="Lozinka" for="password" />
+                            <RadzenNumeric ShowUpDown="false" class="form-control text-center" Style="border-color:gray" Name="Code" @bind-Value="code" id="password" />
+                            <Condition Evaluation="code.HasValue">
+                                <Match>
+                                    <RadzenRequiredValidator Component="Code" Text="Kod nije unesen" Popup=false Style="position: absolute; margin-top:2px;" />
+                                </Match>
+                                <NotMatch>
+                                    <RadzenLengthValidator Component="Code" Min="6" Max="7" Text="Od 6 do 10 znakova" Popup=false Style="position: absolute; margin-top:2px;" />
+                                </NotMatch>
+                            </Condition>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div style="width:45%" class="pt-3">
+                                <button class="btn btn-primary btn-block"> Nazad </button>
+                            </div>
+                            <div style="width:45%" class="pt-3">
+                                <button class="btn btn-dark btn-block"> Pošalji Kod  </button>
+                            </div>
+                        </div>
+                    </RadzenTemplateForm>
+                </NotMatch>
+            </Condition>
         </div>
     </div>
 </div>
@@ -99,6 +107,7 @@
     int? code;
     string email;
     ResponseStatus status;
+    bool firstForm = true;
 
     protected async override Task OnInitializedAsync()
     {
@@ -109,13 +118,25 @@
     private async Task ValidSubmit()
     {
         var response = await AccountApiCall.SendEmailConfirmationAsync(email);
-
+        firstForm = response.Success ? false : true;
     }
 
     private async Task ValidSubmitConfirmation()
     {
-        if(code.HasValue)
-            userActivationModel.Code = code.Value;
+        if (!code.HasValue)
+            return;
+
+        userActivationModel.Code = code.Value;
+
+        var result = await AccountApiCall.VerifyAccountAsync(userActivationModel);
+
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/racun/aktiviran");
+        }
+
+        code = null;
+
 
     }
 
